@@ -33,15 +33,17 @@ fun App() {
                 ) {
                 // Splash Screen
                 composable<Route.SplashScreen> {
-                    SplashScreenRoot {  }
+                    SplashScreenRoot(onSplash = {navController.navigate(Route.UserGraph){
+                        navController.popBackStack(Route.UserGraph,false)
+                    } })
 
                 }
             }
-//            navigation<Route.UserGraph>(
-//                startDestination = Route.UserHomeScreen,
-//            ) {
-//
-//            }
+            navigation<Route.UserGraph>(
+                startDestination = Route.MainScreen,
+            ) {
+
+            }
 //            navigation<Route.RestaurantGraph>(
 //                startDestination = Route.RestaurantHomeScreen
 //            ) {
