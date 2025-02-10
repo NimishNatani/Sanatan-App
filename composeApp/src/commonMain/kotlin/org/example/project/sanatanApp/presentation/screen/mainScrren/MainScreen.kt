@@ -7,6 +7,7 @@ import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.White
+import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreen
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,6 +48,10 @@ fun MainScreenRoot(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    MainScreen(state = state, onAction = {
+        viewModel.onAction(it)
+    })
+
 }
 
 @Composable
@@ -58,7 +64,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
         BottomNavItem(4, Res.drawable.download, "Download")
     )
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Box(modifier = Modifier.fillMaxSize()) {
             AnimatedContent(targetState = state.selectedTabIndex.iconNumber,
                 transitionSpec = {
@@ -74,7 +80,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
                 }) { targetState ->
                 when (targetState) {
                     0 -> {
-
+                        HomeScreen()
                     }
 
                     1 -> {
@@ -94,7 +100,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
                 .fillMaxWidth()
                 .background(color = Gray)
                 .border(width = (0.5).dp, color = Orange)
-                .padding(vertical = 8.dp),
+                .padding(vertical = 18.dp).align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -126,12 +132,12 @@ fun BottomNavItemView(
 ) {
     Box(
         modifier = modifier.clip(CircleShape).background(if (isSelected) Orange else White)
-            .clickable { onClick() }) {
+            .clickable { onClick() }.padding(8.dp)) {
         Icon(
             painter = painterResource(item.iconResId),
             contentDescription = "bottom nav",
             tint = if (isSelected) White else Orange,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(30.dp),
         )
     }
 }

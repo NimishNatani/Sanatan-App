@@ -2,6 +2,7 @@ package org.example.project.sanatanApp.presentation.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,5 +31,26 @@ fun WhiteText(
         fontSize = textSize,
         fontStyle = fontStyle,
         fontFamily = fontWeight
+    )
+}
+
+@Composable
+fun OrangeText(
+    text: String,
+    textSize: TextUnit = TextSize.regular,
+    fontStyle: FontStyle = FontStyle.Normal,
+    fontWeight: FontFamily = FontFamily(
+        Font(
+            Res.font.Inter_24pt_Italic
+        )
+    ),modifier :Modifier = Modifier
+) {
+    Text(
+        text = text,
+        color = Orange,
+        fontSize = textSize,
+        fontStyle = fontStyle,
+        fontFamily = fontWeight,
+        modifier = modifier
     )
 }

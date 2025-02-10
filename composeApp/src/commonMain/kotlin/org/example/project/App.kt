@@ -14,6 +14,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import org.example.project.sanatanApp.presentation.navigation.Route
 import org.example.project.sanatanApp.presentation.screen.logo.SplashScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreen
+import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -42,7 +44,8 @@ fun App() {
             navigation<Route.UserGraph>(
                 startDestination = Route.MainScreen,
             ) {
-
+                composable<Route.MainScreen> {
+                MainScreen(state = MainScreenState(), onAction = {})}
             }
 //            navigation<Route.RestaurantGraph>(
 //                startDestination = Route.RestaurantHomeScreen
