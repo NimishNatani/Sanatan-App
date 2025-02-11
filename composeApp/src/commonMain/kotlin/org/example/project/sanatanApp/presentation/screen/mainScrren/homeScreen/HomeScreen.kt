@@ -63,8 +63,7 @@ fun MainScreenRoot() {
 }
 
 @Composable
-fun HomeScreen() {
-    val searchQuery = ""
+fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreenAction) -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState()).padding(bottom = 85.dp)) {
         Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Orange)) {
@@ -85,8 +84,10 @@ fun HomeScreen() {
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 SearchBar(
-                    searchQuery = searchQuery,
-                    onSearchQueryChange = { /*TODO*/ },
+                    searchQuery = state.searchQuery,
+                    onSearchQueryChange = {
+                        onAction(HomeScreenAction.OnSearch(query = state.searchQuery))
+                    },
                     onImeSearch = { /*TODO*/ })
 
                 Icon(

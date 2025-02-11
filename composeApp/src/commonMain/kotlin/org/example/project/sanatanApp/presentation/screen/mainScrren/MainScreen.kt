@@ -32,6 +32,8 @@ import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.White
 import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreen
+import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenAction
+import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenState
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,7 +46,7 @@ import sanatanapp.composeapp.generated.resources.video
 
 @Composable
 fun MainScreenRoot(
-    viewModel: UserMainScreenViewModel = koinViewModel(),
+    viewModel: MainScreenViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -80,7 +82,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
                 }) { targetState ->
                 when (targetState) {
                     0 -> {
-                        HomeScreen()
+                        HomeScreen(state = HomeScreenState(), onAction = {})
                     }
 
                     1 -> {
