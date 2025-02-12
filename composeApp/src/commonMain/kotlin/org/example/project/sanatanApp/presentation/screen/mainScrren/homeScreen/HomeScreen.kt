@@ -66,7 +66,7 @@ fun MainScreenRoot() {
 fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreenAction) -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState()).padding(bottom = 85.dp)) {
-        Box(modifier = Modifier.fillMaxWidth().height(100.dp).background(Orange)) {
+        Box(modifier = Modifier.fillMaxWidth().height(70.dp).background(Orange)) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 15.dp, start = 10.dp,end = 10.dp)
                     .align(Alignment.BottomCenter),
@@ -123,7 +123,7 @@ fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreen
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Card(
-                modifier = Modifier.fillMaxWidth().height(150.dp)
+                modifier = Modifier.fillMaxWidth().height(170.dp)
                     .padding(vertical = 8.dp, horizontal = 10.dp).background(
                         Gray
                     ).clip(RoundedCornerShape(8.dp))
@@ -169,7 +169,7 @@ fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreen
                 repeat(totalItems) { index ->
                     Box(
                         modifier = Modifier
-                            .size(12.dp)
+                            .size(8.dp)
                             .clip(CircleShape)
                             .background(if (index == selectedIndex) Orange else lightOrange)
                             .padding(4.dp)
@@ -262,7 +262,7 @@ fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreen
             repeat(recommendedItems.size) { index ->
                 Box(
                     modifier = Modifier
-                        .size(12.dp)
+                        .size(8.dp)
                         .clip(CircleShape)
                         .background(if (index == recommendedIndex) Orange else lightOrange)
                         .padding(4.dp)
@@ -296,7 +296,7 @@ fun MenuItem(text: String, iconRes: DrawableResource) {
         OrangeText(
             text,
             textSize = TextSize.regular,
-            fontStyle = FontStyle.Italic,
+            fontStyle = FontStyle.Normal,
             modifier = Modifier.align(Alignment.CenterHorizontally).background(White)
         )
     }

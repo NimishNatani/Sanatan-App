@@ -67,6 +67,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
+
         Box(modifier = Modifier.fillMaxSize()) {
             AnimatedContent(targetState = state.selectedTabIndex.iconNumber,
                 transitionSpec = {
