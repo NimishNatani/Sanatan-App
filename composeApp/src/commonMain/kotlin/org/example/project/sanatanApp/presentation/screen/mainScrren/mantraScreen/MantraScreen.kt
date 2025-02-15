@@ -1,4 +1,4 @@
-package org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen
+package org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -31,25 +31,29 @@ import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
 import org.example.project.sanatanApp.presentation.components.swipeGesture
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreen
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenAction
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenState
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-
 @Composable
-fun BhajanScreenRoot(viewModel: BhajanScreenViewModel = koinViewModel()) {
+fun MantraScreenRoot(viewModel: MantraScreenViewModel = koinViewModel()) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    BhajanScreen(state = state, onAction = {
+    MantraScreen(state = state, onAction = {
         viewModel.onAction(it)
     })
 }
 
+
 @Composable
-fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Unit) {
+fun MantraScreen(state: MantraScreenState, onAction: (MantraScreenAction) -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
-            onAction(BhajanScreenAction.OnSearchQueryChange(it))
+            onAction(MantraScreenAction.OnSearchQueryChange(it))
         })
         Spacer(modifier = Modifier.height(10.dp))
         Column(
@@ -76,30 +80,31 @@ fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Uni
             }
 
             Spacer(modifier = Modifier.height(15.dp))
-            Text("भगवन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-            val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
-            val bhagwanRecommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
-            val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+            Text(" मंत्र चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+            val mantraRecommendedIndex = remember { mutableStateOf(0) }
+            val mantraRecommendedItems = listOf(
+                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
+                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
+                listOf("  1", "  2", "  3", " 4", "5", "6", "7")
+            )
+            val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
             SwappableBox(
-                bhagwanRecommendedIndex,
-                bhagwanRecommendedItems,
-                bhagwanLastRecommendedSwipeTime
+                mantraRecommendedIndex,
+                mantraRecommendedItems[0],
+                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
             )
-            SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
-
-
-            Text("प्रमुख कलाकार", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-            val kalakarRecommendedIndex = remember { mutableStateOf(0) }
-            val kalakarRecommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
-            val kalakarLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-
             SwappableBox(
-                kalakarRecommendedIndex,
-                kalakarRecommendedItems,
-                kalakarLastRecommendedSwipeTime
+                mantraRecommendedIndex,
+                mantraRecommendedItems[1],
+                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
             )
-            SwappableDots(kalakarRecommendedItems.size, kalakarRecommendedIndex, Modifier)
+            SwappableBox(
+                mantraRecommendedIndex,
+                mantraRecommendedItems[2],
+                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
+            )
+            SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
 
 
             Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
@@ -107,7 +112,14 @@ fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Uni
             val recommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
             val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-            SwappableBox(recommendedIndex, recommendedItems, lastRecommendedSwipeTime,2,120.dp,160.dp)
+            SwappableBox(
+                recommendedIndex,
+                recommendedItems,
+                lastRecommendedSwipeTime,
+                2,
+                120.dp,
+                160.dp
+            )
             SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
         }
     }

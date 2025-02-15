@@ -45,34 +45,56 @@ import org.example.project.sanatanApp.presentation.components.TopBar
 import org.example.project.sanatanApp.presentation.components.swipeGesture
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import sanatanapp.composeapp.generated.resources.Res
 import sanatanapp.composeapp.generated.resources.aarti
 import sanatanapp.composeapp.generated.resources.ohm
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun HomeScreenRoot(viewModel: HomeScreenViewModel = koinViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    when(state.screenState) {
+    when (state.screenState) {
         "Home" -> {
             HomeScreen(state = state, onAction = {
                 viewModel.onAction(it)
-            }, onSectionClick = {  })
+            }, onSectionClick = { })
         }
+
         "Bhajan" -> {
             val bhajanViewModel = koinViewModel<BhajanScreenViewModel>()
             BhajanScreenRoot(bhajanViewModel)
+        }
+
+        "Mantra" -> {
+            val mantraScreenViewModel = koinViewModel<MantraScreenViewModel>()
+            MantraScreenRoot(
+                mantraScreenViewModel
+            )
+        }
+
+        "Katha" -> {
+            val kathaScreenViewModel = koinViewModel<KathaScreenViewModel>()
+            KathaScreenRoot(
+                kathaScreenViewModel
+            )
         }
     }
 
 }
 
 @Composable
-fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreenAction) -> Unit,onSectionClick:(String) -> Unit) {
+fun HomeScreen(
+    state: HomeScreenState = HomeScreenState(),
+    onAction: (HomeScreenAction) -> Unit,
+    onSectionClick: (String) -> Unit
+) {
 
     Column(
         modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
@@ -127,15 +149,24 @@ fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreen
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MenuItem("आरती सुनें", Res.drawable.aarti, onClick = {onSectionClick("Aarti")})
-                MenuItem("भजन सुनें", Res.drawable.aarti, onClick = {onAction(HomeScreenAction.OnScreenStateChange("Bhajan"))})
-                MenuItem("ग्रंथ पढ़ें", Res.drawable.aarti, onClick = {onSectionClick("Granth")})
+                MenuItem("आरती सुनें", Res.drawable.aarti, onClick = { onSectionClick("Aarti") })
+                MenuItem(
+                    "भजन सुनें",
+                    Res.drawable.aarti,
+                    onClick = { onAction(HomeScreenAction.OnScreenStateChange("Bhajan")) })
+                MenuItem("ग्रंथ पढ़ें", Res.drawable.aarti, onClick = { onSectionClick("Granth") })
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MenuItem("कथा सुनें", Res.drawable.ohm, onClick = {onSectionClick("Katha")})
-                MenuItem("मंत्र सुनें", Res.drawable.ohm, onClick = {onSectionClick("Mantra")})
-                MenuItem("दर्शन करें", Res.drawable.ohm, onClick = {onSectionClick("Darshan")})
+                MenuItem(
+                    "कथा सुनें",
+                    Res.drawable.ohm,
+                    onClick = { onAction(HomeScreenAction.OnScreenStateChange("Katha")) })
+                MenuItem(
+                    "मंत्र सुनें",
+                    Res.drawable.ohm,
+                    onClick = { onAction(HomeScreenAction.OnScreenStateChange("Mantra")) })
+                MenuItem("दर्शन करें", Res.drawable.ohm, onClick = { onSectionClick("Darshan") })
             }
         }
 
@@ -160,7 +191,7 @@ fun HomeScreen(state: HomeScreenState = HomeScreenState(), onAction: (HomeScreen
 
 
 @Composable
-fun MenuItem(text: String, iconRes: DrawableResource,onClick:()->Unit) {
+fun MenuItem(text: String, iconRes: DrawableResource, onClick: () -> Unit) {
     Card(
         modifier = Modifier.size(110.dp).clip(RoundedCornerShape(8.dp))
             .padding(4.dp).clickable { onClick() },

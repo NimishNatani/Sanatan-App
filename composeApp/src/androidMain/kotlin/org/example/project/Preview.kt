@@ -13,13 +13,15 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScree
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenState
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreen
+import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreen
+import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
 
 @Preview( showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-   val viewModel = viewModel<BhajanScreenViewModel>()
+   val viewModel = viewModel<MantraScreenViewModel>()
    val state by viewModel.uiState.collectAsStateWithLifecycle()
-   BhajanScreen (state = state, onAction = {
+   MantraScreen  (state = state, onAction = {
       viewModel.onAction(it)
    })
 }
