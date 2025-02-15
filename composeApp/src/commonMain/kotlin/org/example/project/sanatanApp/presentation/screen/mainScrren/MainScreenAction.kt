@@ -7,4 +7,5 @@ sealed interface MainScreenAction {
 
     data class OnTabSelected(val index: Int, val icon: DrawableResource, val name:String): MainScreenAction
 
+
 }

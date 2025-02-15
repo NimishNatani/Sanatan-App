@@ -8,6 +8,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
 
 expect val platformModule: Module
 
@@ -24,5 +25,6 @@ val appModule = module {
 
     viewModel { HomeScreenViewModel() }
     viewModel { MainScreenViewModel() }
+    viewModel { BhajanScreenViewModel() }
 
 }

@@ -45,7 +45,7 @@ fun SearchBar(
     ) {
         OutlinedTextField(
             value = searchQuery,
-            onValueChange = onSearchQueryChange,
+            onValueChange = { onSearchQueryChange(it) },
             shape = RoundedCornerShape(8.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 cursorColor = Orange,

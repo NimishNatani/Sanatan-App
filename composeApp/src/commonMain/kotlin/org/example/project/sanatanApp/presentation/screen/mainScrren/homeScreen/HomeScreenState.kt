@@ -6,5 +6,6 @@ data class HomeScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = true,
     val errorMessage: UiText? = null,
+    var screenState:String = "Home",
 //    val searchResults: SearchItem = SearchItem(),
 )

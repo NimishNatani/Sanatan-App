@@ -7,13 +7,11 @@ import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,9 +29,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.White
-import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreen
-import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenAction
-import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenState
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenViewModel
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -65,6 +63,9 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
         BottomNavItem(3, Res.drawable.donation, "Donation"),
         BottomNavItem(4, Res.drawable.download, "Download")
     )
+    val homeScreenViewModel = koinViewModel<HomeScreenViewModel>()
+
+    val bhajanScreenViewModel = koinViewModel<BhajanScreenViewModel>()
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -83,7 +84,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
                 }) { targetState ->
                 when (targetState) {
                     0 -> {
-                        HomeScreen(state = HomeScreenState(), onAction = {})
+                        HomeScreenRoot(homeScreenViewModel)
                     }
 
                     1 -> {
@@ -135,7 +136,8 @@ fun BottomNavItemView(
 ) {
     Box(
         modifier = modifier.clip(CircleShape).background(if (isSelected) Orange else White)
-            .clickable { onClick() }.padding(8.dp)) {
+            .clickable { onClick() }.padding(8.dp)
+    ) {
         Icon(
             painter = painterResource(item.iconResId),
             contentDescription = "bottom nav",

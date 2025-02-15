@@ -3,6 +3,8 @@ package org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenAction
 
 class HomeScreenViewModel():ViewModel() {
 
@@ -16,9 +18,11 @@ class HomeScreenViewModel():ViewModel() {
             }
             is HomeScreenAction.OnSearch -> {
                 _uiState.value = _uiState.value.copy(isLoading = true)
-//                getRestaurantAndFood(
-//                    searchQuery = action.query
-//                )
+            }
+            is HomeScreenAction.OnScreenStateChange -> {
+                println("where are you: here")
+                _uiState.update {  it.copy(screenState = action.name)}
+                println("name: ${action.name}")
             }
         }
     }

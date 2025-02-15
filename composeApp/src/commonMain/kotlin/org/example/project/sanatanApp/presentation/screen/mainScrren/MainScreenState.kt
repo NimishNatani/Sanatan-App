@@ -7,6 +7,5 @@ import sanatanapp.composeapp.generated.resources.home
 
 data class MainScreenState (
     var selectedTabIndex: BottomNavItem = BottomNavItem(0, Res.drawable.home,"Home"),
-    var screenState:String = "Home",
     var callingApi :Int  = 0
 )
