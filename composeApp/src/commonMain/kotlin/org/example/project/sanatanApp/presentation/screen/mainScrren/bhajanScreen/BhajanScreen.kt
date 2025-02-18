@@ -35,21 +35,24 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun BhajanScreenRoot(viewModel: BhajanScreenViewModel = koinViewModel()) {
+fun BhajanScreenRoot(viewModel: BhajanScreenViewModel = koinViewModel(),
+                     onScreenStateChange:()->Unit) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     BhajanScreen(state = state, onAction = {
         viewModel.onAction(it)
-    })
+    },onScreenStateChange={onScreenStateChange()})
 }
 
 @Composable
-fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Unit) {
+fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Unit,onScreenStateChange:()->Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(BhajanScreenAction.OnSearchQueryChange(it))
+        }, onBackClick = {
+            onScreenStateChange()
         })
         Spacer(modifier = Modifier.height(10.dp))
         Column(

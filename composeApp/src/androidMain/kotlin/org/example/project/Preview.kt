@@ -19,9 +19,9 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScree
 @Preview( showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-   val viewModel = viewModel<MantraScreenViewModel>()
-   val state by viewModel.uiState.collectAsStateWithLifecycle()
-   MantraScreen  (state = state, onAction = {
-      viewModel.onAction(it)
-   })
+//   val viewModel = viewModel<MantraScreenViewModel>()
+//   val state by viewModel.uiState.collectAsStateWithLifecycle()
+//   MantraScreen  (state = state, onAction = {
+//      viewModel.onAction(it)
+//   })
 }

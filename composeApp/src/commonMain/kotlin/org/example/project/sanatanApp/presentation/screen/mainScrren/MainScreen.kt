@@ -10,20 +10,26 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
@@ -40,7 +46,9 @@ import sanatanapp.composeapp.generated.resources.donation
 import sanatanapp.composeapp.generated.resources.download
 import sanatanapp.composeapp.generated.resources.home
 import sanatanapp.composeapp.generated.resources.mic
+import sanatanapp.composeapp.generated.resources.notification
 import sanatanapp.composeapp.generated.resources.video
+import kotlin.math.roundToInt
 
 @Composable
 fun MainScreenRoot(
@@ -56,6 +64,9 @@ fun MainScreenRoot(
 
 @Composable
 fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
+
+    val offsetX = remember { mutableStateOf(-50f) }
+    val offsetY = remember { mutableStateOf(600f) }
     val items = listOf(
         BottomNavItem(0, Res.drawable.home, "Home"),
         BottomNavItem(1, Res.drawable.video, "Video"),
@@ -65,7 +76,6 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
     )
     val homeScreenViewModel = koinViewModel<HomeScreenViewModel>()
 
-    val bhajanScreenViewModel = koinViewModel<BhajanScreenViewModel>()
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -98,6 +108,27 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
                 }
             }
         }
+
+        Box(
+            modifier = Modifier.offset {
+                IntOffset(
+                    x= offsetX.value.roundToInt(),
+                    y= offsetY.value.roundToInt()
+                )
+            }.pointerInput(Unit){
+                detectDragGestures { change, dragAmount ->
+                    change.consume()
+                    offsetX.value += dragAmount.x
+                    offsetY.value += dragAmount.y
+                }
+            }.size(60.dp).clip(CircleShape).background(Orange).align(Alignment.CenterEnd)
+        ){Icon(
+            painter = painterResource(Res.drawable.notification),
+            contentDescription = "search",
+            tint = White,
+            modifier = Modifier.align(Alignment.Center)
+        )}
+
 
         Row(
             modifier = Modifier

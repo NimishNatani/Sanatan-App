@@ -94,7 +94,7 @@ fun SearchBar(
                 .background(
                     shape = RoundedCornerShape(8.dp),
                     color = Gray
-                ).height(50.dp).width(200.dp)
+                ).height(50.dp)
                 .minimumInteractiveComponentSize()
         )
     }

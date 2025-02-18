@@ -34,23 +34,24 @@ import org.example.project.sanatanApp.presentation.components.swipeGesture
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun KathaScreenRoot(viewModel: KathaScreenViewModel = koinViewModel()) {
+fun KathaScreenRoot(viewModel: KathaScreenViewModel = koinViewModel(),
+    onScreenStateChange:()->Unit) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     KathaScreen(state = state, onAction = {
         viewModel.onAction(it)
-    })
+    },onScreenStateChange={onScreenStateChange()})
 }
 
 
 @Composable
-fun KathaScreen(state: KathaScreenState, onAction: (KathaScreenAction) -> Unit) {
+fun KathaScreen(state: KathaScreenState, onAction: (KathaScreenAction) -> Unit,onScreenStateChange:()->Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(KathaScreenAction.OnSearchQueryChange(it))
-        })
+        },onBackClick = {onScreenStateChange()})
         Spacer(modifier = Modifier.height(10.dp))
         Column(
             modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())

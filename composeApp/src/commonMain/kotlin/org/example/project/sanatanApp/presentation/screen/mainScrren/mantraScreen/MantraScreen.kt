@@ -38,22 +38,25 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScree
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MantraScreenRoot(viewModel: MantraScreenViewModel = koinViewModel()) {
+fun MantraScreenRoot(viewModel: MantraScreenViewModel = koinViewModel(),
+        onScreenStateChange:()->Unit) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     MantraScreen(state = state, onAction = {
         viewModel.onAction(it)
-    })
+    },onScreenStateChange={onScreenStateChange()})
 }
 
 
 @Composable
-fun MantraScreen(state: MantraScreenState, onAction: (MantraScreenAction) -> Unit) {
+fun MantraScreen(state: MantraScreenState, onAction: (MantraScreenAction) -> Unit,onScreenStateChange:()->Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(MantraScreenAction.OnSearchQueryChange(it))
+        }, onBackClick = {
+            onScreenStateChange()
         })
         Spacer(modifier = Modifier.height(10.dp))
         Column(

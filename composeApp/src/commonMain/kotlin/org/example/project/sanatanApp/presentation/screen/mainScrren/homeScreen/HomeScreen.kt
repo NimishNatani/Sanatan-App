@@ -69,20 +69,28 @@ fun HomeScreenRoot(viewModel: HomeScreenViewModel = koinViewModel()) {
 
         "Bhajan" -> {
             val bhajanViewModel = koinViewModel<BhajanScreenViewModel>()
-            BhajanScreenRoot(bhajanViewModel)
+            BhajanScreenRoot(bhajanViewModel, onScreenStateChange = {
+                viewModel.onAction(HomeScreenAction.OnScreenStateChange("Home"))
+            })
         }
 
         "Mantra" -> {
             val mantraScreenViewModel = koinViewModel<MantraScreenViewModel>()
             MantraScreenRoot(
-                mantraScreenViewModel
+                mantraScreenViewModel,
+                onScreenStateChange = {
+                    viewModel.onAction(HomeScreenAction.OnScreenStateChange("Home"))
+                }
             )
         }
 
         "Katha" -> {
             val kathaScreenViewModel = koinViewModel<KathaScreenViewModel>()
             KathaScreenRoot(
-                kathaScreenViewModel
+                kathaScreenViewModel,
+                onScreenStateChange = {
+                    viewModel.onAction(HomeScreenAction.OnScreenStateChange("Home"))
+                }
             )
         }
     }
@@ -102,7 +110,7 @@ fun HomeScreen(
     ) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(HomeScreenAction.OnSearchQueryChange(it))
-        })
+        }, profile = true)
         Spacer(modifier = Modifier.height(10.dp))
 
         Row(
