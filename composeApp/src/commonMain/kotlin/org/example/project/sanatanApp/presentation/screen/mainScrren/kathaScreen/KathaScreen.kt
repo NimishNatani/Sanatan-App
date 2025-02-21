@@ -34,24 +34,33 @@ import org.example.project.sanatanApp.presentation.components.swipeGesture
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun KathaScreenRoot(viewModel: KathaScreenViewModel = koinViewModel(),
-    onScreenStateChange:()->Unit) {
+fun KathaScreenRoot(
+    viewModel: KathaScreenViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
+    kathaListen:()-> Unit
+) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     KathaScreen(state = state, onAction = {
         viewModel.onAction(it)
-    },onScreenStateChange={onScreenStateChange()})
+    }, onBackClick = { onBackClick() },
+        kathaListen = {kathaListen()})
 }
 
 
 @Composable
-fun KathaScreen(state: KathaScreenState, onAction: (KathaScreenAction) -> Unit,onScreenStateChange:()->Unit) {
+fun KathaScreen(
+    state: KathaScreenState,
+    onAction: (KathaScreenAction) -> Unit,
+    onBackClick: () -> Unit,
+    kathaListen: () -> Unit
+) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(KathaScreenAction.OnSearchQueryChange(it))
-        },onBackClick = {onScreenStateChange()})
+        }, onBackClick = { onBackClick() })
         Spacer(modifier = Modifier.height(10.dp))
         Column(
             modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
@@ -89,7 +98,7 @@ fun KathaScreen(state: KathaScreenState, onAction: (KathaScreenAction) -> Unit,o
             SwappableBox(
                 mantraRecommendedIndex,
                 mantraRecommendedItems[0],
-                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
+                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp, onClick = { kathaListen() }
             )
             SwappableBox(
                 mantraRecommendedIndex,

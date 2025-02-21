@@ -20,4 +20,26 @@ sealed interface Route {
 
     @Serializable
     data object MainScreen : Route
+
+    @Serializable
+    data object AartiScreen :Route
+
+    @Serializable
+    data object BhajanScreen :Route
+
+    @Serializable
+    data object GranthScreen :Route
+
+    @Serializable
+    data object KathaScreen :Route
+
+    @Serializable
+    data object MantraScreen :Route
+
+    @Serializable
+    data object DarshanScreen :Route
+
+    @Serializable
+    data object KathaListenScreen :Route
+
 }

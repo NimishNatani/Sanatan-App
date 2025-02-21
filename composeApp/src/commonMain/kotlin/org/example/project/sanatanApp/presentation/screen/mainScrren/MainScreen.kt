@@ -53,17 +53,18 @@ import kotlin.math.roundToInt
 @Composable
 fun MainScreenRoot(
     viewModel: MainScreenViewModel = koinViewModel(),
+    onSectionClick: (String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     MainScreen(state = state, onAction = {
         viewModel.onAction(it)
-    })
+    }, onSectionClick = {onSectionClick(it)})
 
 }
 
 @Composable
-fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
+fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit,onSectionClick:(String)-> Unit) {
 
     val offsetX = remember { mutableStateOf(-50f) }
     val offsetY = remember { mutableStateOf(600f) }
@@ -94,7 +95,7 @@ fun MainScreen(state: MainScreenState, onAction: (MainScreenAction) -> Unit) {
                 }) { targetState ->
                 when (targetState) {
                     0 -> {
-                        HomeScreenRoot(homeScreenViewModel)
+                        HomeScreenRoot(homeScreenViewModel,onSectionClick= {onSectionClick(it)})
                     }
 
                     1 -> {

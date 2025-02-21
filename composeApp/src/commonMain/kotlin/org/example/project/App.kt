@@ -14,8 +14,19 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import org.example.project.sanatanApp.presentation.navigation.Route
 import org.example.project.sanatanApp.presentation.screen.logo.SplashScreenRoot
-import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreen
-import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenState
+import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaListenScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,9 +46,11 @@ fun App() {
                 ) {
                 // Splash Screen
                 composable<Route.SplashScreen> {
-                    SplashScreenRoot(onSplash = {navController.navigate(Route.UserGraph){
-                        navController.popBackStack(Route.UserGraph,false)
-                    } })
+                    SplashScreenRoot(onSplash = {
+                        navController.navigate(Route.UserGraph) {
+                            navController.popBackStack(Route.UserGraph, true)
+                        }
+                    })
 
                 }
             }
@@ -45,14 +58,53 @@ fun App() {
                 startDestination = Route.MainScreen,
             ) {
                 composable<Route.MainScreen> {
-                MainScreen(state = MainScreenState(), onAction = {})}
+                    val viewModel = koinViewModel<MainScreenViewModel>()
+                    MainScreenRoot(viewModel = viewModel, onSectionClick = {
+                        when (it) {
+                            "Aarti" -> navController.navigate(Route.AartiScreen)
+                            "Bhajan" -> navController.navigate(Route.BhajanScreen)
+                            "Granth" -> navController.navigate(Route.GranthScreen)
+                            "Katha" -> navController.navigate(Route.KathaScreen)
+                            "Mantra" -> navController.navigate(Route.MantraScreen)
+                            "Darshan" -> navController.navigate(Route.DarshanScreen)
+                        }
+                    })
+                }
+                composable<Route.AartiScreen> {
+                    val viewModel = koinViewModel<AartiScreenViewModel>()
+                    AartiScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = { navController.popBackStack() })
+                }
+                composable<Route.BhajanScreen> {
+                    val viewModel = koinViewModel<BhajanScreenViewModel>()
+                    BhajanScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = { navController.popBackStack() })
+                }
+                composable<Route.GranthScreen> {
+                    val viewModel = koinViewModel<GranthScreenViewModel>()
+                    GranthScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = { navController.popBackStack() })
+                }
+                composable<Route.KathaScreen> {
+                    val viewModel = koinViewModel<KathaScreenViewModel>()
+                    KathaScreenRoot(
+                        viewModel = viewModel,
+                        kathaListen = {navController.navigate(Route.KathaListenScreen)},
+                        onBackClick = { navController.popBackStack() })
+                }
+                composable<Route.MantraScreen> {
+                    val viewModel = koinViewModel<MantraScreenViewModel>()
+                    MantraScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = { navController.popBackStack() })
+                }
+                composable<Route.KathaListenScreen>{
+                    KathaListenScreenRoot()
+                }
             }
-//            navigation<Route.RestaurantGraph>(
-//                startDestination = Route.RestaurantHomeScreen
-//            ) {
-//
-//            }
-
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen
+package org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -31,33 +31,29 @@ import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
 import org.example.project.sanatanApp.presentation.components.swipeGesture
-import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreen
-import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenAction
-import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenState
-import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreen
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenAction
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenState
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MantraScreenRoot(viewModel: MantraScreenViewModel = koinViewModel(),
-                     onBackClick:()->Unit) {
-
+fun GranthScreenRoot(viewModel: GranthScreenViewModel = koinViewModel(),
+                     onBackClick:()->Unit){
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    MantraScreen(state = state, onAction = {
+    GranthScreen(state = state, onAction = {
         viewModel.onAction(it)
     },onBackClick={onBackClick()})
 }
 
-
 @Composable
-fun MantraScreen(state: MantraScreenState, onAction: (MantraScreenAction) -> Unit,onBackClick:()->Unit) {
+fun GranthScreen(state: GranthScreenState, onAction: (GranthScreenAction) -> Unit, onBackClick:()->Unit){
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
-            onAction(MantraScreenAction.OnSearchQueryChange(it))
-        }, onBackClick = {
-            onBackClick()
-        })
+            onAction(GranthScreenAction.OnSearchQueryChange(it))
+        },onBackClick = {onBackClick()})
         Spacer(modifier = Modifier.height(10.dp))
         Column(
             modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
@@ -83,10 +79,9 @@ fun MantraScreen(state: MantraScreenState, onAction: (MantraScreenAction) -> Uni
             }
 
             Spacer(modifier = Modifier.height(15.dp))
-            Text(" मंत्र चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+            Text("ग्रन्थ चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
             val mantraRecommendedIndex = remember { mutableStateOf(0) }
             val mantraRecommendedItems = listOf(
-                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
                 listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
                 listOf("  1", "  2", "  3", " 4", "5", "6", "7")
             )
@@ -100,12 +95,7 @@ fun MantraScreen(state: MantraScreenState, onAction: (MantraScreenAction) -> Uni
             SwappableBox(
                 mantraRecommendedIndex,
                 mantraRecommendedItems[1],
-                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
-            )
-            SwappableBox(
-                mantraRecommendedIndex,
-                mantraRecommendedItems[2],
-                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
+                mantraLastRecommendedSwipeTime, 2, 120.dp, 80.dp
             )
             SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
 

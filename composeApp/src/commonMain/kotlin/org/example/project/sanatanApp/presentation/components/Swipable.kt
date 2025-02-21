@@ -3,6 +3,7 @@ package org.example.project.sanatanApp.presentation.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -103,7 +104,8 @@ fun SwappableBox(
     lastRecommendedSwipeTime: MutableState<Long>,
     totalItems: Int=4,
     height:Dp=80.dp,
-    width:Dp=80.dp
+    width:Dp=80.dp,
+    onClick:()->Unit = {}
 ){
     Row(
         modifier = Modifier.fillMaxWidth().height(100.dp).padding(vertical = 8.dp)
@@ -120,7 +122,7 @@ fun SwappableBox(
             Box(
                 modifier = Modifier.size(height=height, width = width).clip(
                     RoundedCornerShape(4.dp)
-                )
+                ).clickable { onClick() }
                     .border(
                         BorderStroke((0.5).dp, Orange),
                         RoundedCornerShape(4.dp)

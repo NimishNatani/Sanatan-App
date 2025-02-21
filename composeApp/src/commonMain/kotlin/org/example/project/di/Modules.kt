@@ -13,6 +13,8 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
 
 expect val platformModule: Module
+//expect fun VideoPlayer(modifier: Modifier, url: String)
+
 
 
 

@@ -36,23 +36,23 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BhajanScreenRoot(viewModel: BhajanScreenViewModel = koinViewModel(),
-                     onScreenStateChange:()->Unit) {
+                     onBackClick:()->Unit) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     BhajanScreen(state = state, onAction = {
         viewModel.onAction(it)
-    },onScreenStateChange={onScreenStateChange()})
+    },onBackClick={onBackClick()})
 }
 
 @Composable
-fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Unit,onScreenStateChange:()->Unit) {
+fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Unit,onBackClick:()->Unit) {
 
     Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(BhajanScreenAction.OnSearchQueryChange(it))
         }, onBackClick = {
-            onScreenStateChange()
+            onBackClick()
         })
         Spacer(modifier = Modifier.height(10.dp))
         Column(
@@ -79,7 +79,7 @@ fun BhajanScreen(state: BhajanScreenState, onAction: (BhajanScreenAction) -> Uni
             }
 
             Spacer(modifier = Modifier.height(15.dp))
-            Text("भगवन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+            Text("भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
             val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
             val bhagwanRecommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
             val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }

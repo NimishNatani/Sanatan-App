@@ -43,12 +43,6 @@ import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
 import org.example.project.sanatanApp.presentation.components.swipeGesture
-import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenRoot
-import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
-import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenRoot
-import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
-import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenRoot
-import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -57,44 +51,15 @@ import sanatanapp.composeapp.generated.resources.aarti
 import sanatanapp.composeapp.generated.resources.ohm
 
 @Composable
-fun HomeScreenRoot(viewModel: HomeScreenViewModel = koinViewModel()) {
+fun HomeScreenRoot(
+    viewModel: HomeScreenViewModel = koinViewModel(),
+    onSectionClick: (String) -> Unit
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    when (state.screenState) {
-        "Home" -> {
-            HomeScreen(state = state, onAction = {
-                viewModel.onAction(it)
-            }, onSectionClick = { })
-        }
-
-        "Bhajan" -> {
-            val bhajanViewModel = koinViewModel<BhajanScreenViewModel>()
-            BhajanScreenRoot(bhajanViewModel, onScreenStateChange = {
-                viewModel.onAction(HomeScreenAction.OnScreenStateChange("Home"))
-            })
-        }
-
-        "Mantra" -> {
-            val mantraScreenViewModel = koinViewModel<MantraScreenViewModel>()
-            MantraScreenRoot(
-                mantraScreenViewModel,
-                onScreenStateChange = {
-                    viewModel.onAction(HomeScreenAction.OnScreenStateChange("Home"))
-                }
-            )
-        }
-
-        "Katha" -> {
-            val kathaScreenViewModel = koinViewModel<KathaScreenViewModel>()
-            KathaScreenRoot(
-                kathaScreenViewModel,
-                onScreenStateChange = {
-                    viewModel.onAction(HomeScreenAction.OnScreenStateChange("Home"))
-                }
-            )
-        }
-    }
-
+    HomeScreen(state = state, onAction = {
+        viewModel.onAction(it)
+    }, onSectionClick = {onSectionClick(it) })
 }
 
 @Composable
@@ -114,7 +79,8 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 5.dp),
+            modifier = Modifier.horizontalScroll(rememberScrollState())
+                .padding(horizontal = 5.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             repeat(8) {
@@ -157,28 +123,41 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                MenuItem("आरती सुनें", Res.drawable.aarti, onClick = { onSectionClick("Aarti") })
+                MenuItem(
+                    "आरती सुनें",
+                    Res.drawable.aarti,
+                    onClick = { onSectionClick("Aarti") })
                 MenuItem(
                     "भजन सुनें",
                     Res.drawable.aarti,
-                    onClick = { onAction(HomeScreenAction.OnScreenStateChange("Bhajan")) })
-                MenuItem("ग्रंथ पढ़ें", Res.drawable.aarti, onClick = { onSectionClick("Granth") })
+                    onClick = { onSectionClick("Bhajan") })
+                MenuItem(
+                    "ग्रंथ पढ़ें",
+                    Res.drawable.aarti,
+                    onClick = { onSectionClick("Granth") })
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 MenuItem(
                     "कथा सुनें",
                     Res.drawable.ohm,
-                    onClick = { onAction(HomeScreenAction.OnScreenStateChange("Katha")) })
+                    onClick = { onSectionClick("Katha") })
                 MenuItem(
                     "मंत्र सुनें",
                     Res.drawable.ohm,
-                    onClick = { onAction(HomeScreenAction.OnScreenStateChange("Mantra")) })
-                MenuItem("दर्शन करें", Res.drawable.ohm, onClick = { onSectionClick("Darshan") })
+                    onClick = { onSectionClick("Mantra") })
+                MenuItem(
+                    "दर्शन करें",
+                    Res.drawable.ohm,
+                    onClick = { onSectionClick("Darshan") })
             }
         }
 
-        Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp, start = 20.dp))
+        Text(
+            "आपके लिए",
+            fontSize = 18.sp,
+            modifier = Modifier.padding(top = 8.dp, start = 20.dp)
+        )
 
         // "आपके लिए" Circular Swipable Box with Two Items Visible
         val recommendedIndex = remember { mutableStateOf(0) }
