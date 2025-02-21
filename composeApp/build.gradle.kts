@@ -48,9 +48,11 @@ kotlin {
 
             implementation(libs.androidx.security.crypto.ktx.v110alpha06)
 
-            implementation(libs.androidx.media3.exoplayer)
-            implementation(libs.androidx.media3.exoplayer.dash)
-            implementation(libs.androidx.media3.ui)
+
+
+//            implementation(libs.androidx.media3.exoplayer)
+//            implementation(libs.androidx.media3.exoplayer.dash)
+//            implementation(libs.androidx.media3.ui)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -82,6 +84,8 @@ kotlin {
             implementation(libs.bundles.coil)
 
             implementation(libs.kamel.image)
+
+            implementation(libs.compose.multiplatform.media.player)
 
             implementation(libs.compass.geolocation)
             implementation(libs.compass.geolocation.mobile)

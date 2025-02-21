@@ -1,5 +1,7 @@
 package org.example.project.di
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
 import org.example.project.core.di.HttpClientFactory
@@ -8,13 +10,13 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
 
 expect val platformModule: Module
-//expect fun VideoPlayer(modifier: Modifier, url: String)
-
 
 
 
@@ -32,4 +34,6 @@ val appModule = module {
     viewModel { BhajanScreenViewModel() }
     viewModel { MantraScreenViewModel() }
     viewModel { KathaScreenViewModel() }
+    viewModel { AartiScreenViewModel() }
+    viewModel { GranthScreenViewModel() }
 }

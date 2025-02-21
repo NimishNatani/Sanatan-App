@@ -1,11 +1,18 @@
 package org.example.project.di
 
+import androidx.compose.runtime.Composable
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import platform.WebKit.WKWebViewConfiguration
+import platform.CoreGraphics.CGRectZero
+import platform.UIKit.UIView
+
 
 actual val platformModule: Module
     get() = module {
         single<HttpClientEngine> { Darwin.create() }
     }
+
+
