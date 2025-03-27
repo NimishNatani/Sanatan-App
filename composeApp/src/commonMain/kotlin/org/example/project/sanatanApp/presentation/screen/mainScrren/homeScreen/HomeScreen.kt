@@ -126,7 +126,7 @@ fun HomeScreen(
                 MenuItem(
                     "आरती सुनें",
                     Res.drawable.aarti,
-                    onClick = { onSectionClick("Aarti") })
+                    onClick = { onSectionClick("AartiDto") })
                 MenuItem(
                     "भजन सुनें",
                     Res.drawable.aarti,

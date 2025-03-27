@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,57 +52,75 @@ fun AartiScreen(
     onAction: (AartiScreenAction) -> Unit,
     onBackClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
-        TopBar(state.searchQuery, onSearchQueryChange = {
-            onAction(AartiScreenAction.OnSearchQueryChange(it))
-        }, onBackClick = {
-            onBackClick()
-        })
-        Spacer(modifier = Modifier.height(10.dp))
-        Column(
-            modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
-                .padding(horizontal = 10.dp),
-        ) {
-            val selectedIndex = remember { mutableStateOf(0) }
-            val totalItems = 4
-            val lastSwipeTime = remember { mutableStateOf(0L) }
+    LaunchedEffect(Unit){
+        onAction(AartiScreenAction.OnLoadingAarti)
+    }
+    if (state.isLoading) {
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Card(
-                    modifier = Modifier.fillMaxWidth().height(170.dp)
-                        .padding(vertical = 8.dp, horizontal = 10.dp).background(
-                            Gray
-                        ).clip(RoundedCornerShape(8.dp))
-                        .border(BorderStroke((0.5).dp, Orange), shape = RoundedCornerShape(8.dp))
-                        .align(Alignment.CenterHorizontally)
-                        .swipeGesture(selectedIndex, totalItems, lastSwipeTime),
-                    elevation = CardDefaults.cardElevation(8.dp)
-                ) {
+    } else if (state.errorMessage != null) {
+
+    } else {
+        Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
+            TopBar(state.searchQuery, onSearchQueryChange = {
+                onAction(AartiScreenAction.OnSearchQueryChange(it))
+            }, onBackClick = {
+                onBackClick()
+            })
+            Spacer(modifier = Modifier.height(10.dp))
+            Column(
+                modifier = Modifier.fillMaxSize().background(Gray)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 10.dp),
+            ) {
+                val selectedIndex = remember { mutableStateOf(0) }
+                val totalItems = 4
+                val lastSwipeTime = remember { mutableStateOf(0L) }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Card(
+                        modifier = Modifier.fillMaxWidth().height(170.dp)
+                            .padding(vertical = 8.dp, horizontal = 10.dp).background(
+                                Gray
+                            ).clip(RoundedCornerShape(8.dp))
+                            .border(
+                                BorderStroke((0.5).dp, Orange),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .align(Alignment.CenterHorizontally)
+                            .swipeGesture(selectedIndex, totalItems, lastSwipeTime),
+                        elevation = CardDefaults.cardElevation(8.dp)
+                    ) {
+                    }
+                    SwappableDots(totalItems, selectedIndex, Modifier)
                 }
-                SwappableDots(totalItems, selectedIndex, Modifier)
+
+                Spacer(modifier = Modifier.height(15.dp))
+                Text("भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+                val aartiRecommendedIndex = remember { mutableStateOf(0) }
+                val aartiRecommendedItems = state.aartiList.map { aarti-> aarti.name }
+                val aartiLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+
+                SwappableBox(
+                    aartiRecommendedIndex,
+                    aartiRecommendedItems,
+                    aartiLastRecommendedSwipeTime
+                )
+                SwappableDots(aartiRecommendedItems.size, aartiRecommendedIndex, Modifier)
+
+                Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+                val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
+                val bhagwanRecommendedItems =
+                    listOf("  1", "  2", "  3", " 4", "5", "6", "7")
+                val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+
+                SwappableBox(
+                    bhagwanRecommendedIndex,
+                    bhagwanRecommendedItems,
+                    bhagwanLastRecommendedSwipeTime
+                )
+                SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
+
             }
-
-            Spacer(modifier = Modifier.height(15.dp))
-            Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-            val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
-            val bhagwanRecommendedItems = listOf(
-                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
-                listOf("  1", "  2", "  3", " 4", "5", "6", "7")
-            )
-            val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-
-            SwappableBox(
-                bhagwanRecommendedIndex,
-                bhagwanRecommendedItems[0],
-                bhagwanLastRecommendedSwipeTime
-            )
-            SwappableBox(
-                bhagwanRecommendedIndex,
-                bhagwanRecommendedItems[1],
-                bhagwanLastRecommendedSwipeTime, 2, 120.dp, 160.dp
-            )
-            SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
-
         }
     }
 }

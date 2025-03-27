@@ -5,4 +5,5 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScree
 sealed interface AartiScreenAction {
     data class OnSearchQueryChange(val query: String): AartiScreenAction
     data class OnSearch(val query:String): AartiScreenAction
+    data object OnLoadingAarti : AartiScreenAction
 }

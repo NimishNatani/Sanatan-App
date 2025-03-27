@@ -61,7 +61,7 @@ fun App() {
                     val viewModel = koinViewModel<MainScreenViewModel>()
                     MainScreenRoot(viewModel = viewModel, onSectionClick = {
                         when (it) {
-                            "Aarti" -> navController.navigate(Route.AartiScreen)
+                            "AartiDto" -> navController.navigate(Route.AartiScreen)
                             "Bhajan" -> navController.navigate(Route.BhajanScreen)
                             "Granth" -> navController.navigate(Route.GranthScreen)
                             "Katha" -> navController.navigate(Route.KathaScreen)

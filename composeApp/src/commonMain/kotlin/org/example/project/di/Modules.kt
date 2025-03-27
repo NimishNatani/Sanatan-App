@@ -15,6 +15,12 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScree
 import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
+import org.example.project.sanatanApp.data.api.AartiApi
+import org.example.project.sanatanApp.domain.repository.AartiRepo
+import org.example.project.sanatanApp.data.repository.AartiRepoImpl
+import org.koin.core.module.dsl.singleOf
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.bind
 
 expect val platformModule: Module
 
@@ -29,11 +35,15 @@ val appModule = module {
 //    single { HttpClientFactory.create(get()) }
     single { HttpClientFactory().create(get()) } // Pass the HttpClientEngine
 
-    viewModel { HomeScreenViewModel() }
-    viewModel { MainScreenViewModel() }
-    viewModel { BhajanScreenViewModel() }
-    viewModel { MantraScreenViewModel() }
-    viewModel { KathaScreenViewModel() }
-    viewModel { AartiScreenViewModel() }
-    viewModel { GranthScreenViewModel() }
+    singleOf(::AartiApi)
+
+    singleOf(::AartiRepoImpl).bind<AartiRepo>()
+
+    viewModelOf(::HomeScreenViewModel)
+    viewModelOf (:: MainScreenViewModel)
+    viewModelOf (:: BhajanScreenViewModel)
+    viewModelOf (:: MantraScreenViewModel)
+    viewModelOf (:: KathaScreenViewModel)
+    viewModelOf (:: AartiScreenViewModel)
+    viewModelOf (:: GranthScreenViewModel)
 }
