@@ -12,10 +12,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import org.example.project.sanatanApp.presentation.StorageViewModel
 import org.example.project.sanatanApp.presentation.navigation.Route
 import org.example.project.sanatanApp.presentation.screen.logo.SplashScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiListenScreen
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenRoot
@@ -72,9 +74,13 @@ fun App() {
                 }
                 composable<Route.AartiScreen> {
                     val viewModel = koinViewModel<AartiScreenViewModel>()
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
                     AartiScreenRoot(
                         viewModel = viewModel,
-                        onBackClick = { navController.popBackStack() })
+                        onBackClick = { navController.popBackStack() },
+                        onAartiClick = { aarti -> sharedUserViewModel.setAarti(aarti)
+                        navController.navigate(Route.AartiListenScreen)})
                 }
                 composable<Route.BhajanScreen> {
                     val viewModel = koinViewModel<BhajanScreenViewModel>()
@@ -103,6 +109,17 @@ fun App() {
                 }
                 composable<Route.KathaListenScreen>{
                     KathaListenScreenRoot()
+                }
+                composable<Route.AartiListenScreen>{
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
+                    sharedUserViewModel.aartiState.value?.let {
+                        aarti->
+                        AartiListenScreen(
+                            url = aarti.aarti.values.firstOrNull()?.link,
+                        )
+
+                    }
                 }
             }
         }

@@ -21,6 +21,7 @@ import org.example.project.sanatanApp.data.repository.AartiRepoImpl
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
+import org.example.project.sanatanApp.presentation.StorageViewModel
 
 expect val platformModule: Module
 
@@ -46,4 +47,5 @@ val appModule = module {
     viewModelOf (:: KathaScreenViewModel)
     viewModelOf (:: AartiScreenViewModel)
     viewModelOf (:: GranthScreenViewModel)
+    viewModelOf (:: StorageViewModel)
 }

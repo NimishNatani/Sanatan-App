@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
+import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
@@ -37,20 +38,23 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AartiScreenRoot(
     viewModel: AartiScreenViewModel = koinViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onAartiClick:(aarti:Aarti) ->Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     AartiScreen(state = state, onAction = {
         viewModel.onAction(it)
-    }, onBackClick = { onBackClick() })
+    }, onBackClick = { onBackClick() },
+        onAartiClick = { aarti -> onAartiClick(aarti)})
 }
 
 @Composable
 fun AartiScreen(
     state: AartiScreenState,
     onAction: (AartiScreenAction) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onAartiClick:(aarti:Aarti) ->Unit
 ) {
     LaunchedEffect(Unit){
         onAction(AartiScreenAction.OnLoadingAarti)
@@ -59,7 +63,7 @@ fun AartiScreen(
 
     } else if (state.errorMessage != null) {
 
-    } else {
+    } else if(state.aartiList != emptyList<Aarti>()) {
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
                 onAction(AartiScreenAction.OnSearchQueryChange(it))
@@ -99,11 +103,13 @@ fun AartiScreen(
                 val aartiRecommendedIndex = remember { mutableStateOf(0) }
                 val aartiRecommendedItems = state.aartiList.map { aarti-> aarti.name }
                 val aartiLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-
+println("here+${aartiRecommendedItems.size}")
                 SwappableBox(
                     aartiRecommendedIndex,
                     aartiRecommendedItems,
-                    aartiLastRecommendedSwipeTime
+                    aartiLastRecommendedSwipeTime, onClick = {name->
+                        onAartiClick(findAartiByName(state.aartiList,name)!!)
+                    }
                 )
                 SwappableDots(aartiRecommendedItems.size, aartiRecommendedIndex, Modifier)
 
@@ -123,4 +129,14 @@ fun AartiScreen(
             }
         }
     }
+}
+
+fun getFirstAartiLink(aartiList: List<Aarti>, name: String): String? {
+    return aartiList.find { it.name == name }  // Find Aarti by name
+        ?.aarti?.values?.firstOrNull()  // Get first Link object
+        ?.link  // Extract link
+}
+
+fun findAartiByName(aartiList: List<Aarti>, name: String): Aarti? {
+    return aartiList.find { it.name == name }  // Find the Aarti by name
 }

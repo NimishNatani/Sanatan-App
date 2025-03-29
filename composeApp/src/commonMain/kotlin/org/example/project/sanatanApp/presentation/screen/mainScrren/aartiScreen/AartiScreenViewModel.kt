@@ -37,7 +37,7 @@ class AartiScreenViewModel(private val repo: AartiRepo) : ViewModel() {
     private fun getAllAarti() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getAllAarti()
-                .onSuccess { _uiState.update { it.copy(aartiList = it.aartiList, isLoading = false) } }
+                .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
                 .onError { _uiState.update { it.copy(errorMessage = it.errorMessage, isLoading = false) } }
         }
     }

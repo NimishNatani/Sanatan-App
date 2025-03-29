@@ -16,7 +16,7 @@ fun AartiDto.toAarti(): Aarti {
 fun LinkDto.toLink(): Link {
     return Link(
         link = link,
-        thumbnail = thumbnail
+        thumbnail = tb
     )
 
 }

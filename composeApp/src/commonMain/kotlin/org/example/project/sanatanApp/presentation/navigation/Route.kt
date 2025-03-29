@@ -42,4 +42,7 @@ sealed interface Route {
     @Serializable
     data object KathaListenScreen :Route
 
+    @Serializable
+    data object AartiListenScreen :Route
+
 }

@@ -105,7 +105,7 @@ fun SwappableBox(
     totalItems: Int=4,
     height:Dp=80.dp,
     width:Dp=80.dp,
-    onClick:()->Unit = {}
+    onClick:(name:String)->Unit = {}
 ){
     Row(
         modifier = Modifier.fillMaxWidth().height(100.dp).padding(vertical = 8.dp)
@@ -122,7 +122,7 @@ fun SwappableBox(
             Box(
                 modifier = Modifier.size(height=height, width = width).clip(
                     RoundedCornerShape(4.dp)
-                ).clickable { onClick() }
+                ).clickable { onClick(items[index]) }
                     .border(
                         BorderStroke((0.5).dp, Orange),
                         RoundedCornerShape(4.dp)
