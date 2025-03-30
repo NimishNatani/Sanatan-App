@@ -43,6 +43,6 @@ sealed interface Route {
     data object KathaListenScreen :Route
 
     @Serializable
-    data object AartiListenScreen :Route
+    data object YoutubeScreen :Route
 
 }

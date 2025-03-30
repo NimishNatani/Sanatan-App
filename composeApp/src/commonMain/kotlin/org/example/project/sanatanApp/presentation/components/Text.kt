@@ -2,10 +2,12 @@ package org.example.project.sanatanApp.presentation.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.TextSize
@@ -43,7 +45,7 @@ fun OrangeText(
         Font(
             Res.font.Inter_24pt_Italic
         )
-    ),modifier :Modifier = Modifier
+    ),alignment: TextAlign = TextAlign.Start,modifier :Modifier = Modifier
 ) {
     Text(
         text = text,
@@ -51,6 +53,7 @@ fun OrangeText(
         fontSize = textSize,
         fontStyle = fontStyle,
         fontFamily = fontWeight,
-        modifier = modifier
+        modifier = modifier,
+        textAlign = alignment
     )
 }

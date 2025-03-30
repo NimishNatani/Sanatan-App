@@ -103,7 +103,6 @@ fun AartiScreen(
                 val aartiRecommendedIndex = remember { mutableStateOf(0) }
                 val aartiRecommendedItems = state.aartiList.map { aarti-> aarti.name }
                 val aartiLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-println("here+${aartiRecommendedItems.size}")
                 SwappableBox(
                     aartiRecommendedIndex,
                     aartiRecommendedItems,

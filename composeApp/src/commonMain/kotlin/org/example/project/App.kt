@@ -17,7 +17,6 @@ import org.example.project.sanatanApp.presentation.navigation.Route
 import org.example.project.sanatanApp.presentation.screen.logo.SplashScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
-import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiListenScreen
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenRoot
@@ -29,6 +28,7 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen
 import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.youtubeScreen.YoutubeScreenRoot
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -80,7 +80,7 @@ fun App() {
                         viewModel = viewModel,
                         onBackClick = { navController.popBackStack() },
                         onAartiClick = { aarti -> sharedUserViewModel.setAarti(aarti)
-                        navController.navigate(Route.AartiListenScreen)})
+                        navController.navigate(Route.YoutubeScreen)})
                 }
                 composable<Route.BhajanScreen> {
                     val viewModel = koinViewModel<BhajanScreenViewModel>()
@@ -110,12 +110,12 @@ fun App() {
                 composable<Route.KathaListenScreen>{
                     KathaListenScreenRoot()
                 }
-                composable<Route.AartiListenScreen>{
+                composable<Route.YoutubeScreen>{
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
                     sharedUserViewModel.aartiState.value?.let {
                         aarti->
-                        AartiListenScreen(
+                        YoutubeScreenRoot(
                             url = aarti.aarti.values.firstOrNull()?.link,
                         )
 

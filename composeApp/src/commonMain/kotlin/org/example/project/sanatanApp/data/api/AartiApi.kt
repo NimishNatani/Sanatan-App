@@ -19,4 +19,5 @@ class AartiApi(private val client: HttpClient) {
             }
         }
     }
+
 }

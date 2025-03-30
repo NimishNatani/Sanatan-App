@@ -6,6 +6,6 @@ import org.example.project.sanatanApp.domain.model.Aarti
 data class AartiScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = true,
-    val errorMessage: UiText? = null,
+    val errorMessage: String? = null,
     val aartiList : List<Aarti> = emptyList(),
 )

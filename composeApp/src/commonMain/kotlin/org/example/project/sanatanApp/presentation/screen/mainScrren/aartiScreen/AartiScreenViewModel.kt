@@ -38,7 +38,7 @@ class AartiScreenViewModel(private val repo: AartiRepo) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getAllAarti()
                 .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
-                .onError { _uiState.update { it.copy(errorMessage = it.errorMessage, isLoading = false) } }
+                .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
     }
 }
