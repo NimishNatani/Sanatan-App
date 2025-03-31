@@ -22,7 +22,10 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.example.project.sanatanApp.data.api.YoutubeApi
 import org.example.project.sanatanApp.data.repository.YoutubeRepoImpl
+import org.example.project.sanatanApp.domain.repository.BhajanRepo
 import org.example.project.sanatanApp.presentation.screen.mainScrren.youtubeScreen.YoutubeScreenViewModel
+import org.example.project.sanatanApp.data.api.BhajanApi
+import org.example.project.sanatanApp.data.repository.BhajanRepoImpl
 
 expect val platformModule: Module
 
@@ -38,9 +41,11 @@ val appModule = module {
 
     singleOf(::AartiApi)
     singleOf(::YoutubeApi)
+    singleOf(::BhajanApi)
 
     singleOf(::AartiRepoImpl).bind<AartiRepo>()
     singleOf(::YoutubeRepoImpl).bind<YoutubeRepo>()
+    singleOf(::BhajanRepoImpl).bind<BhajanRepo>()
 
     viewModelOf(::HomeScreenViewModel)
     viewModelOf(::MainScreenViewModel)
@@ -51,4 +56,5 @@ val appModule = module {
     viewModelOf(::GranthScreenViewModel)
     viewModelOf(::StorageViewModel)
     viewModelOf(::YoutubeScreenViewModel)
+
 }

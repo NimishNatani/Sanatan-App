@@ -1,10 +1,10 @@
 package org.example.project.sanatanApp.data.dto
 
 import kotlinx.serialization.Serializable
+
 @Serializable
-data class AartiDto(
+data class BhajanDto(
     val _id :String,
     val name: String,
-    val aarti:Map<String, LinkDto>
+    val bhajan:Map<String, LinkDto>
 )
-

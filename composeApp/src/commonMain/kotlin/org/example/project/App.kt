@@ -84,9 +84,14 @@ fun App() {
                 }
                 composable<Route.BhajanScreen> {
                     val viewModel = koinViewModel<BhajanScreenViewModel>()
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
                     BhajanScreenRoot(
                         viewModel = viewModel,
-                        onBackClick = { navController.popBackStack() })
+                        onBackClick = { navController.popBackStack() },
+                        onBhajanClick = { bhajan -> sharedUserViewModel.setBhajan(bhajan)
+                        navController.navigate(Route.YoutubeScreen)}
+                        )
                 }
                 composable<Route.GranthScreen> {
                     val viewModel = koinViewModel<GranthScreenViewModel>()
