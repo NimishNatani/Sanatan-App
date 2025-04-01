@@ -62,12 +62,13 @@ fun BhajanScreen(
 
     LaunchedEffect(Unit) {
         onAction(BhajanScreenAction.OnLoadingBhajan)
+        onAction(BhajanScreenAction.OnLoadingBhajanKalakar)
     }
     if (state.isLoading) {
 
     } else if (state.errorMessage != null) {
 
-    } else if (state.bhajanList != emptyList<Aarti>()) {
+    } else if (state.bhajanList != emptyList<Aarti>()&& state.bhajanKalakarList != emptyList<Aarti>()) {
 
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
@@ -121,13 +122,15 @@ fun BhajanScreen(
 
                 Text("प्रमुख कलाकार", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val kalakarRecommendedIndex = remember { mutableStateOf(0) }
-                val kalakarRecommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
+                val kalakarRecommendedItems = state.bhajanKalakarList.map { bhajan -> bhajan.name }
                 val kalakarLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
                 SwappableBox(
                     kalakarRecommendedIndex,
                     kalakarRecommendedItems,
-                    kalakarLastRecommendedSwipeTime
+                    kalakarLastRecommendedSwipeTime, onClick = {name ->
+                        onBhajanClick(findBhajanByName(state.bhajanKalakarList, name)!!)
+                    }
                 )
                 SwappableDots(kalakarRecommendedItems.size, kalakarRecommendedIndex, Modifier)
 

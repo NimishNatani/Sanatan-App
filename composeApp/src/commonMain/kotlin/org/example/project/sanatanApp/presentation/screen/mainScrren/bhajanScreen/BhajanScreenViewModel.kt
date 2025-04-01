@@ -31,6 +31,11 @@ class BhajanScreenViewModel(private val repo:BhajanRepo):ViewModel() {
                 _uiState.value = _uiState.value.copy(isLoading = false)
                 getAllBhajan()
             }
+
+            is BhajanScreenAction.OnLoadingBhajanKalakar -> {
+                _uiState.value = _uiState.value.copy(isLoading = false)
+                getAllBhajanKalakar()
+            }
         }
     }
 
@@ -38,6 +43,13 @@ class BhajanScreenViewModel(private val repo:BhajanRepo):ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getAllBhajan()
                 .onSuccess {result-> _uiState.update { it.copy(bhajanList = result, isLoading = false) } }
+                .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
+        }
+    }
+    private fun getAllBhajanKalakar(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAllBhajanKalakar()
+                .onSuccess {result-> _uiState.update { it.copy(bhajanKalakarList =  result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
     }

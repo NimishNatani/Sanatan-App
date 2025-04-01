@@ -21,6 +21,14 @@ class BhajanRepoImpl(private val apiService: BhajanApi): BhajanRepo {
         }
     }
 
+    override suspend fun getAllBhajanKalakar(): Result<List<Bhajan>, DataError.Remote> {
+        return apiService.getAllBhajanKalakar().map { bhajanDtoList ->
+            bhajanDtoList.map { bhajanDto ->
+                bhajanDto.toBhajan()
+            }
+        }
+    }
+
     override suspend fun getBhajanByName(): Bhajan {
         TODO("Not yet implemented")
     }

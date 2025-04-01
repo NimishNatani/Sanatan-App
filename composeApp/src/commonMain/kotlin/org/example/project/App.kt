@@ -4,6 +4,7 @@ package org.example.project
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -107,17 +108,58 @@ fun App() {
                         onBackClick = { navController.popBackStack() })
                 }
                 composable<Route.MantraScreen> {
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
                     val viewModel = koinViewModel<MantraScreenViewModel>()
                     MantraScreenRoot(
                         viewModel = viewModel,
-                        onBackClick = { navController.popBackStack() })
+                        onBackClick = { navController.popBackStack() },
+                        onMantraClick = { mantra, type -> sharedUserViewModel.setMantra(mantra,type)
+                        navController.navigate(Route.YoutubeScreen)})
                 }
                 composable<Route.KathaListenScreen>{
                     KathaListenScreenRoot()
                 }
                 composable<Route.YoutubeScreen>{
+                    val url = mutableStateOf<String?>(null)
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
+                    sharedUserViewModel.listTypeState.value?.let{value->
+                        when(value){
+                             "Aarti"->{
+                                 sharedUserViewModel.aartiState.value?.let {
+                                         aarti-> url.value = aarti.aarti.values.firstOrNull()?.link
+                                 }
+                             }
+                            "Bhajan" -> {
+                                sharedUserViewModel.bhajanState.value?.let {
+                                        bhajan-> url.value = bhajan.bhajan.values.firstOrNull()?.link
+                                }
+                            }
+                            "Mantra" ->{
+                                sharedUserViewModel.mantraState.value?.let {
+                                        mantra-> when(mantra.second){
+                                            1-> {
+                                                url.value =
+                                                    mantra.first.mantra.getValue("mantra1").link
+                                            }
+                                            2-> {
+                                                url.value =
+                                                    mantra.first.mantra.getValue("mantra2").link
+                                            }
+                                            3-> {
+                                                url.value =
+                                                    mantra.first.mantra.getValue("mantra3").link
+                                            }
+                                        }
+                                }
+                            }
+                            else ->{}
+                        }
+                        url.value?.let {
+                            YoutubeScreenRoot(url = url.value)
+                        }
+                    }
                     sharedUserViewModel.aartiState.value?.let {
                         aarti->
                         YoutubeScreenRoot(

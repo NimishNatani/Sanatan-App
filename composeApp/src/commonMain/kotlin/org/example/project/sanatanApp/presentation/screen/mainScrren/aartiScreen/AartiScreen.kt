@@ -136,6 +136,6 @@ fun getFirstAartiLink(aartiList: List<Aarti>, name: String): String? {
         ?.link  // Extract link
 }
 
-fun findAartiByName(aartiList: List<Aarti>, name: String): Aarti? {
+private fun findAartiByName(aartiList: List<Aarti>, name: String): Aarti? {
     return aartiList.find { it.name == name }  // Find the Aarti by name
 }

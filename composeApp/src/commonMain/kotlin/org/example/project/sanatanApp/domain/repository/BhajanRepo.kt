@@ -7,5 +7,6 @@ import org.example.project.sanatanApp.domain.model.Bhajan
 
 interface BhajanRepo {
     suspend fun getAllBhajan(): Result<List<Bhajan>, DataError.Remote>
+    suspend fun getAllBhajanKalakar(): Result<List<Bhajan>, DataError.Remote>
     suspend fun getBhajanByName(): Bhajan
 }

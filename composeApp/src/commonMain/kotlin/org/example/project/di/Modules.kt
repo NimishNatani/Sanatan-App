@@ -4,8 +4,16 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
 import org.example.project.core.di.HttpClientFactory
 import org.example.project.sanatanApp.data.api.AartiApi
+import org.example.project.sanatanApp.data.api.BhajanApi
+import org.example.project.sanatanApp.data.api.MantraApi
+import org.example.project.sanatanApp.data.api.YoutubeApi
 import org.example.project.sanatanApp.data.repository.AartiRepoImpl
+import org.example.project.sanatanApp.data.repository.BhajanRepoImpl
+import org.example.project.sanatanApp.data.repository.MantraRepoImpl
+import org.example.project.sanatanApp.data.repository.YoutubeRepoImpl
 import org.example.project.sanatanApp.domain.repository.AartiRepo
+import org.example.project.sanatanApp.domain.repository.BhajanRepo
+import org.example.project.sanatanApp.domain.repository.MantraRepo
 import org.example.project.sanatanApp.domain.repository.YoutubeRepo
 import org.example.project.sanatanApp.presentation.StorageViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
@@ -15,17 +23,13 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScree
 import org.example.project.sanatanApp.presentation.screen.mainScrren.homeScreen.HomeScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.youtubeScreen.YoutubeScreenViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.example.project.sanatanApp.data.api.YoutubeApi
-import org.example.project.sanatanApp.data.repository.YoutubeRepoImpl
-import org.example.project.sanatanApp.domain.repository.BhajanRepo
-import org.example.project.sanatanApp.presentation.screen.mainScrren.youtubeScreen.YoutubeScreenViewModel
-import org.example.project.sanatanApp.data.api.BhajanApi
-import org.example.project.sanatanApp.data.repository.BhajanRepoImpl
+
 
 expect val platformModule: Module
 
@@ -42,10 +46,12 @@ val appModule = module {
     singleOf(::AartiApi)
     singleOf(::YoutubeApi)
     singleOf(::BhajanApi)
+    singleOf(::MantraApi)
 
     singleOf(::AartiRepoImpl).bind<AartiRepo>()
     singleOf(::YoutubeRepoImpl).bind<YoutubeRepo>()
     singleOf(::BhajanRepoImpl).bind<BhajanRepo>()
+    singleOf(::MantraRepoImpl).bind<MantraRepo>()
 
     viewModelOf(::HomeScreenViewModel)
     viewModelOf(::MainScreenViewModel)

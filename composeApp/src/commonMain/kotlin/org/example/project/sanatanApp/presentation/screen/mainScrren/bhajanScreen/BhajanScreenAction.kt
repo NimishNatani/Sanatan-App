@@ -7,4 +7,5 @@ sealed interface BhajanScreenAction {
     data class OnSearchQueryChange(val query: String): BhajanScreenAction
     data class OnSearch(val query:String): BhajanScreenAction
     data object OnLoadingBhajan : BhajanScreenAction
+    data object OnLoadingBhajanKalakar : BhajanScreenAction
 }
