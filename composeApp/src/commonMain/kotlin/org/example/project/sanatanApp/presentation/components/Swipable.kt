@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,9 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
+import io.ktor.http.Url
 import kotlinx.datetime.Clock
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.White
@@ -100,11 +105,12 @@ fun SwappableDots(totalItems: Int, selectedIndex: MutableState<Int>, modifier: M
 @Composable
 fun SwappableBox(
     recommendedIndex: MutableState<Int>,
-    items: List<String>,
+    item:List<String> = listOf(""),
     lastRecommendedSwipeTime: MutableState<Long>,
     totalItems: Int=4,
     height:Dp=80.dp,
     width:Dp=80.dp,
+    items: List<Pair<String,String>> = listOf( Pair("", "")),
     onClick:(name:String)->Unit = {}
 ){
     Row(
@@ -122,7 +128,7 @@ fun SwappableBox(
             Box(
                 modifier = Modifier.size(height=height, width = width).clip(
                     RoundedCornerShape(4.dp)
-                ).clickable { onClick(items[index]) }
+                ).clickable { onClick(items[index].first) }
                     .border(
                         BorderStroke((0.5).dp, Orange),
                         RoundedCornerShape(4.dp)
@@ -130,7 +136,13 @@ fun SwappableBox(
                     .padding(8.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(items[index], fontSize = 16.sp)
+                KamelImage(
+                    { asyncPainterResource(data = Url(items[index].second)) },
+                    contentDescription = "Image",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
             }
             Spacer(modifier = Modifier.width(10.dp))
 

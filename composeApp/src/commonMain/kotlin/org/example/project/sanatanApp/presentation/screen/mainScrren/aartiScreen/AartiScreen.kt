@@ -101,12 +101,13 @@ fun AartiScreen(
                 Spacer(modifier = Modifier.height(15.dp))
                 Text("भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val aartiRecommendedIndex = remember { mutableStateOf(0) }
-                val aartiRecommendedItems = state.aartiList.map { aarti-> aarti.name }
+                val aartiRecommendedItems = extractFirstThumbnails(state.aartiList)
                 val aartiLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
                 SwappableBox(
                     aartiRecommendedIndex,
-                    aartiRecommendedItems,
-                    aartiLastRecommendedSwipeTime, onClick = {name->
+                    listOf(""),
+                    aartiLastRecommendedSwipeTime,
+                    items = aartiRecommendedItems,onClick = {name->
                         onAartiClick(findAartiByName(state.aartiList,name)!!)
                     }
                 )
@@ -135,6 +136,14 @@ fun getFirstAartiLink(aartiList: List<Aarti>, name: String): String? {
         ?.aarti?.values?.firstOrNull()  // Get first Link object
         ?.link  // Extract link
 }
+
+fun extractFirstThumbnails(aartiList: List<Aarti>): List<Pair<String, String>> {
+    return aartiList.mapNotNull { aarti ->
+        val firstThumbnail = aarti.aarti.values.firstOrNull { it.thumbnail.isNotEmpty() }?.thumbnail
+        firstThumbnail?.let { aarti.name to it }
+    }
+}
+
 
 private fun findAartiByName(aartiList: List<Aarti>, name: String): Aarti? {
     return aartiList.find { it.name == name }  // Find the Aarti by name
