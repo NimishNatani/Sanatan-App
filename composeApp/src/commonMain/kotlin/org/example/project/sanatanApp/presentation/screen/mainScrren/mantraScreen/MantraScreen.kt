@@ -104,35 +104,35 @@ fun MantraScreen(
                 Text(" मंत्र चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val mantraRecommendedIndex = remember { mutableStateOf(0) }
                 val mantraRecommendedItems = listOf(
-                    state.mantraList.map { aarti -> aarti.name },
-                    state.mantraList.map { aarti -> aarti.name },
-                    state.mantraList.map { aarti -> aarti.name },
+                    extractSecondThumbnails(state.mantraList,0),
+                    extractSecondThumbnails(state.mantraList,1),
+                    extractSecondThumbnails(state.mantraList,2),
                 )
                 val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
                 SwappableBox(
                     mantraRecommendedIndex,
-                    mantraRecommendedItems[0],
+                    listOf(""),
                     mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp,
                     onClick = { name ->
                         onMantraClick(findMantraByName(state.mantraList, name)!!, 1)
-                    }
+                    }, items = mantraRecommendedItems[0]
                 )
                 SwappableBox(
                     mantraRecommendedIndex,
-                    mantraRecommendedItems[1],
+                    listOf(""),
                     mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp,
                     onClick = { name ->
                         onMantraClick(findMantraByName(state.mantraList, name)!!, 2)
-                    }
+                    }, items = mantraRecommendedItems[1]
                 )
                 SwappableBox(
                     mantraRecommendedIndex,
-                    mantraRecommendedItems[2],
+                    listOf(""),
                     mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp,
                     onClick = { name ->
                         onMantraClick(findMantraByName(state.mantraList, name)!!, 3)
-                    }
+                    }, items = mantraRecommendedItems[2]
                 )
                 SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
 
@@ -153,6 +153,14 @@ fun MantraScreen(
                 SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
             }
         }
+    }
+}
+
+private fun extractSecondThumbnails(mantraList: List<Mantra>,index:Int): List<Pair<String, String>> {
+    return mantraList.mapNotNull { mantra ->
+        val secondThumbnail =
+            mantra.mantra.values.filter { it.thumbnail.isNotEmpty() }.getOrNull(index)?.thumbnail
+        secondThumbnail?.let { mantra.name to it }
     }
 }
 

@@ -49,7 +49,7 @@ fun BhajanScreenRoot(
     BhajanScreen(state = state, onAction = {
         viewModel.onAction(it)
     }, onBackClick = { onBackClick() },
-        onBhajanClick = {bhajan -> onBhajanClick(bhajan) })
+        onBhajanClick = { bhajan -> onBhajanClick(bhajan) })
 }
 
 @Composable
@@ -68,7 +68,7 @@ fun BhajanScreen(
 
     } else if (state.errorMessage != null) {
 
-    } else if (state.bhajanList != emptyList<Aarti>()&& state.bhajanKalakarList != emptyList<Aarti>()) {
+    } else if (state.bhajanList != emptyList<Aarti>() && state.bhajanKalakarList != emptyList<Aarti>()) {
 
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
@@ -107,30 +107,31 @@ fun BhajanScreen(
                 Spacer(modifier = Modifier.height(15.dp))
                 Text("भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
-                val bhagwanRecommendedItems = state.bhajanList.map { bhajan -> bhajan.name }
+                val bhagwanRecommendedItems = extractFirstThumbnails(state.bhajanList)
                 val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
                 SwappableBox(
                     bhagwanRecommendedIndex,
-                    bhagwanRecommendedItems,
+                    listOf(""),
                     bhagwanLastRecommendedSwipeTime, onClick = { name ->
                         onBhajanClick(findBhajanByName(state.bhajanList, name)!!)
-                    }
+                    }, items = bhagwanRecommendedItems
                 )
                 SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
 
 
                 Text("प्रमुख कलाकार", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val kalakarRecommendedIndex = remember { mutableStateOf(0) }
-                val kalakarRecommendedItems = state.bhajanKalakarList.map { bhajan -> bhajan.name }
+                val kalakarRecommendedItems =
+                    extractFirstThumbnails(state.bhajanKalakarList)
                 val kalakarLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
                 SwappableBox(
                     kalakarRecommendedIndex,
-                    kalakarRecommendedItems,
-                    kalakarLastRecommendedSwipeTime, onClick = {name ->
+                    listOf(""),
+                    kalakarLastRecommendedSwipeTime, onClick = { name ->
                         onBhajanClick(findBhajanByName(state.bhajanKalakarList, name)!!)
-                    }
+                    }, items = kalakarRecommendedItems
                 )
                 SwappableDots(kalakarRecommendedItems.size, kalakarRecommendedIndex, Modifier)
 
@@ -154,6 +155,14 @@ fun BhajanScreen(
     }
 }
 
-fun findBhajanByName(bhajanList: List<Bhajan>, name: String): Bhajan? {
+private fun extractFirstThumbnails(bhajanList: List<Bhajan>): List<Pair<String, String>> {
+    return bhajanList.mapNotNull { bhajan ->
+        val firstThumbnail =
+            bhajan.bhajan.values.firstOrNull { it.thumbnail.isNotEmpty() }?.thumbnail
+        firstThumbnail?.let { bhajan.name to it }
+    }
+}
+
+private fun findBhajanByName(bhajanList: List<Bhajan>, name: String): Bhajan? {
     return bhajanList.find { it.name == name }  // Find the Aarti by name
 }

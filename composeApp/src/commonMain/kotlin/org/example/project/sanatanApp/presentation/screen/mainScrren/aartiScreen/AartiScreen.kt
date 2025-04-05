@@ -137,7 +137,7 @@ fun getFirstAartiLink(aartiList: List<Aarti>, name: String): String? {
         ?.link  // Extract link
 }
 
-fun extractFirstThumbnails(aartiList: List<Aarti>): List<Pair<String, String>> {
+private fun extractFirstThumbnails(aartiList: List<Aarti>): List<Pair<String, String>> {
     return aartiList.mapNotNull { aarti ->
         val firstThumbnail = aarti.aarti.values.firstOrNull { it.thumbnail.isNotEmpty() }?.thumbnail
         firstThumbnail?.let { aarti.name to it }

@@ -59,7 +59,7 @@ fun HomeScreenRoot(
 
     HomeScreen(state = state, onAction = {
         viewModel.onAction(it)
-    }, onSectionClick = {onSectionClick(it) })
+    }, onSectionClick = { onSectionClick(it) })
 }
 
 @Composable
@@ -71,7 +71,7 @@ fun HomeScreen(
 
     Column(
         modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
-            .padding(bottom = 85.dp)
+            .padding(bottom = 85.dp),
     ) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(HomeScreenAction.OnSearchQueryChange(it))
@@ -166,7 +166,7 @@ fun HomeScreen(
 
         SwappableBox(
             recommendedIndex,
-            recommendedItems,
+            listOf(""),
             lastRecommendedSwipeTime,
             2,
             120.dp,

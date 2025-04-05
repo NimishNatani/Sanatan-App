@@ -11,7 +11,7 @@ import org.example.project.sanatanApp.data.dto.BhajanDto
 import org.example.project.sanatanApp.domain.model.Aarti
 
 class BhajanApi(private val client: HttpClient) {
-    private val BASE_URL = "http://10.14.4.23:8080/api/bhajan"
+    private val BASE_URL = "http://10.14.2.252:8080/api/bhajan"
 
     suspend fun getAllBhajan(): Result<List<BhajanDto>,DataError.Remote> {
         return safeCall<List<BhajanDto>> {

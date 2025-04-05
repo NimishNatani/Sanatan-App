@@ -11,7 +11,7 @@ import org.example.project.sanatanApp.data.dto.MantraDto
 import org.example.project.sanatanApp.domain.model.Aarti
 
 class MantraApi(private val client: HttpClient) {
-    private val BASE_URL = "http://10.14.4.23:8080/api/mantra"
+    private val BASE_URL = "http://10.14.2.252:8080/api/mantra"
 
     suspend fun getAllMantra(): Result<List<MantraDto>,DataError.Remote> {
         return safeCall<List<MantraDto>> {

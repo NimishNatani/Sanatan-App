@@ -120,7 +120,7 @@ fun SwappableBox(
                 items.size,
                 lastRecommendedSwipeTime
             ),
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         repeat(totalItems) { offset ->
             val index =
