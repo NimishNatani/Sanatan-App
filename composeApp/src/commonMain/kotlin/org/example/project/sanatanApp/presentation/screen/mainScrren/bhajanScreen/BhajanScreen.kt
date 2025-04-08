@@ -30,6 +30,7 @@ import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.model.Bhajan
+import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
@@ -65,7 +66,7 @@ fun BhajanScreen(
         onAction(BhajanScreenAction.OnLoadingBhajanKalakar)
     }
     if (state.isLoading) {
-
+ShimmerEffect()
     } else if (state.errorMessage != null) {
 
     } else if (state.bhajanList != emptyList<Aarti>() && state.bhajanKalakarList != emptyList<Aarti>()) {

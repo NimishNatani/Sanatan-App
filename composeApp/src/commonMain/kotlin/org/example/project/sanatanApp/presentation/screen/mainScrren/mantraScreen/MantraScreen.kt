@@ -30,11 +30,11 @@ import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.model.Mantra
+import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
 import org.example.project.sanatanApp.presentation.components.swipeGesture
-import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenAction
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -62,7 +62,7 @@ fun MantraScreen(
         onAction(MantraScreenAction.OnLoadingMantra)
     }
     if (state.isLoading) {
-
+        ShimmerEffect()
     } else if (state.errorMessage != null) {
 
     } else if (state.mantraList != emptyList<Aarti>()) {
@@ -104,9 +104,9 @@ fun MantraScreen(
                 Text(" मंत्र चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val mantraRecommendedIndex = remember { mutableStateOf(0) }
                 val mantraRecommendedItems = listOf(
-                    extractSecondThumbnails(state.mantraList,0),
-                    extractSecondThumbnails(state.mantraList,1),
-                    extractSecondThumbnails(state.mantraList,2),
+                    extractSecondThumbnails(state.mantraList, 0),
+                    extractSecondThumbnails(state.mantraList, 1),
+                    extractSecondThumbnails(state.mantraList, 2),
                 )
                 val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
@@ -156,7 +156,10 @@ fun MantraScreen(
     }
 }
 
-private fun extractSecondThumbnails(mantraList: List<Mantra>,index:Int): List<Pair<String, String>> {
+private fun extractSecondThumbnails(
+    mantraList: List<Mantra>,
+    index: Int
+): List<Pair<String, String>> {
     return mantraList.mapNotNull { mantra ->
         val secondThumbnail =
             mantra.mantra.values.filter { it.thumbnail.isNotEmpty() }.getOrNull(index)?.thumbnail
