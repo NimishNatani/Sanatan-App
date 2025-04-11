@@ -32,6 +32,8 @@ import org.koin.dsl.module
 
 
 expect val platformModule: Module
+expect fun getPlatformConfiguration(): Module
+
 
 
 val appModule = module {

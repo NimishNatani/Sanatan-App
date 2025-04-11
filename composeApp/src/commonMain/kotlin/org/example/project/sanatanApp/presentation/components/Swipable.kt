@@ -114,7 +114,7 @@ fun SwappableBox(
     onClick:(name:String)->Unit = {}
 ){
     Row(
-        modifier = Modifier.fillMaxWidth().height(100.dp).padding(vertical = 8.dp)
+        modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp)
             .swipeGesture(
                 recommendedIndex,
                 items.size,

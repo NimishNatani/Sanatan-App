@@ -122,11 +122,6 @@ fun ShimmerEffect() {
                 mantraLastRecommendedSwipeTime, 2,
                 items = mantraRecommendedItems
             )
-            SwappableBoxShimmerEffect(
-                mantraRecommendedIndex,
-                mantraLastRecommendedSwipeTime, 2,
-                items = mantraRecommendedItems
-            )
             SwappableDots(mantraRecommendedItems.size, mantraRecommendedIndex, Modifier)
 
 

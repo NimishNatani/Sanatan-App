@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 import org.example.project.core.domain.onError
 import org.example.project.core.domain.onSuccess
 import org.example.project.sanatanApp.domain.repository.AartiRepo
+import org.example.project.sanatanApp.presentation.components.PlatformConfiguration
 
-class AartiScreenViewModel(private val repo: AartiRepo) : ViewModel() {
+class AartiScreenViewModel(private val repo: AartiRepo,private val screenSize: PlatformConfiguration) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AartiScreenState())
     val uiState = _uiState.asStateFlow()
@@ -40,5 +41,9 @@ class AartiScreenViewModel(private val repo: AartiRepo) : ViewModel() {
                 .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
+    }
+
+    fun getScreenSize():Pair<Float,Float>{
+        return Pair(screenSize.screenWidth(),screenSize.screenHeight())
     }
 }

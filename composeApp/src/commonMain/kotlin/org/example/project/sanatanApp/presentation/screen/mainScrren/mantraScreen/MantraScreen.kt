@@ -46,17 +46,21 @@ fun MantraScreenRoot(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val screenSize = viewModel.getScreenSize()
+
     MantraScreen(state = state, onAction = {
         viewModel.onAction(it)
     }, onBackClick = { onBackClick() },
-        onMantraClick = { mantra, type -> onMantraClick(mantra, type) })
+        onMantraClick = { mantra, type -> onMantraClick(mantra, type) },
+        screenSize = screenSize)
 }
 
 
 @Composable
 fun MantraScreen(
     state: MantraScreenState, onAction: (MantraScreenAction) -> Unit, onBackClick: () -> Unit,
-    onMantraClick: (mantra: Mantra, type: Int) -> Unit
+    onMantraClick: (mantra: Mantra, type: Int) -> Unit,    screenSize: Pair<Float, Float>
+
 ) {
     LaunchedEffect(Unit) {
         onAction(MantraScreenAction.OnLoadingMantra)
@@ -113,26 +117,20 @@ fun MantraScreen(
                 SwappableBox(
                     mantraRecommendedIndex,
                     listOf(""),
-                    mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp,
+                    mantraLastRecommendedSwipeTime, 2,
                     onClick = { name ->
                         onMantraClick(findMantraByName(state.mantraList, name)!!, 1)
-                    }, items = mantraRecommendedItems[0]
+                    }, items = mantraRecommendedItems[0],height = 120.dp,
+                    width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableBox(
                     mantraRecommendedIndex,
                     listOf(""),
-                    mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp,
+                    mantraLastRecommendedSwipeTime, 2,
                     onClick = { name ->
                         onMantraClick(findMantraByName(state.mantraList, name)!!, 2)
-                    }, items = mantraRecommendedItems[1]
-                )
-                SwappableBox(
-                    mantraRecommendedIndex,
-                    listOf(""),
-                    mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp,
-                    onClick = { name ->
-                        onMantraClick(findMantraByName(state.mantraList, name)!!, 3)
-                    }, items = mantraRecommendedItems[2]
+                    }, items = mantraRecommendedItems[1],height = 120.dp,
+                    width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
 

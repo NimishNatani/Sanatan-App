@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chaintech.videoplayer.model.PlayerConfig
 import chaintech.videoplayer.ui.video.VideoPlayerView
+import org.example.project.core.presentation.Black
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.TextSize
 import org.example.project.core.presentation.White
@@ -51,13 +52,13 @@ fun YoutubeScreen(
     onAction: (YoutubeScreenAction) -> Unit,
 ) {
     LaunchedEffect(Unit) {
-        onAction(YoutubeScreenAction.OnLoadingAartiSubtitles(url!!))
+        onAction(YoutubeScreenAction.OnLoadingSubtitles(url!!))
     }
     if (state.isLoading) {
 
     } else if (state.errorMessage != null) {
 
-    } else if (state.subtitles != null) {
+    } else if (state.youtube?.subtitles != null) {
 
         val isPause = remember { mutableStateOf(false) }
 
@@ -87,7 +88,9 @@ fun YoutubeScreen(
             Column(
                 modifier = Modifier.fillMaxSize().padding(10.dp)
             ) {
-                Text("Subtitle", fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                Text(state.youtube.title, fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Black)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Subtitle", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Scrollable Subtitle Texts
@@ -96,7 +99,12 @@ fun YoutubeScreen(
                     modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    OrangeText(state.subtitles.subtitles, textSize = TextSize.large, alignment = TextAlign.Center)
+                    val subtitlesStatus = parseStringFromSubtitles(state.youtube.subtitles)
+                    OrangeText(if(subtitlesStatus?.status !="error"){
+                        subtitlesStatus!!.message
+                    }else{
+                        "Sorry!\nSubtitle not found"
+                    }, textSize = TextSize.large, alignment = TextAlign.Center)
                 }
             }
         }

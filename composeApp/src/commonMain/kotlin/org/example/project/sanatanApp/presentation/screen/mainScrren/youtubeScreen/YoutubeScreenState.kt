@@ -6,5 +6,6 @@ import org.example.project.sanatanApp.domain.model.Youtube
 data class YoutubeScreenState(
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
-    val subtitles: Youtube?= null
+    val youtube: Youtube?= null,
+
 )

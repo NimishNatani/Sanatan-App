@@ -3,6 +3,6 @@ package org.example.project.sanatanApp.presentation.screen.mainScrren.youtubeScr
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenAction
 
 interface YoutubeScreenAction {
-    data class OnLoadingAartiSubtitles( val aarti:String): YoutubeScreenAction
+    data class OnLoadingSubtitles( val aarti:String): YoutubeScreenAction
 
 }

@@ -5,7 +5,8 @@ import org.example.project.sanatanApp.domain.model.Youtube
 
 fun YoutubeDto.toYoutube(): Youtube {
     return Youtube(
-        status = status,
-        subtitles = subtitles
+        errorMessage = errorMessage,
+        subtitles = subtitles,
+        title = title,
     )
 }

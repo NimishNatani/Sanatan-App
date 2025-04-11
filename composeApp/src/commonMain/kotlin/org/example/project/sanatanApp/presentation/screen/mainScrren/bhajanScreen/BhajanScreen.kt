@@ -47,10 +47,14 @@ fun BhajanScreenRoot(
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val screenSize = viewModel.getScreenSize()
+
+
     BhajanScreen(state = state, onAction = {
         viewModel.onAction(it)
     }, onBackClick = { onBackClick() },
-        onBhajanClick = { bhajan -> onBhajanClick(bhajan) })
+        onBhajanClick = { bhajan -> onBhajanClick(bhajan) },
+        screenSize = screenSize)
 }
 
 @Composable
@@ -58,7 +62,8 @@ fun BhajanScreen(
     state: BhajanScreenState,
     onAction: (BhajanScreenAction) -> Unit,
     onBackClick: () -> Unit,
-    onBhajanClick: (bhajan: Bhajan) -> Unit
+    onBhajanClick: (bhajan: Bhajan) -> Unit,
+    screenSize: Pair<Float, Float>
 ) {
 
     LaunchedEffect(Unit) {
@@ -116,7 +121,9 @@ ShimmerEffect()
                     listOf(""),
                     bhagwanLastRecommendedSwipeTime, onClick = { name ->
                         onBhajanClick(findBhajanByName(state.bhajanList, name)!!)
-                    }, items = bhagwanRecommendedItems
+                    }, items = bhagwanRecommendedItems,
+                    height = 120.dp,
+                    width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
 
@@ -132,7 +139,9 @@ ShimmerEffect()
                     listOf(""),
                     kalakarLastRecommendedSwipeTime, onClick = { name ->
                         onBhajanClick(findBhajanByName(state.bhajanKalakarList, name)!!)
-                    }, items = kalakarRecommendedItems
+                    }, items = kalakarRecommendedItems,
+                    height = 120.dp,
+                    width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableDots(kalakarRecommendedItems.size, kalakarRecommendedIndex, Modifier)
 

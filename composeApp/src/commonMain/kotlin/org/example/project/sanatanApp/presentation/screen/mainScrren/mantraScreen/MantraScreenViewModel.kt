@@ -11,10 +11,11 @@ import kotlinx.coroutines.launch
 import org.example.project.core.domain.onError
 import org.example.project.core.domain.onSuccess
 import org.example.project.sanatanApp.domain.repository.MantraRepo
+import org.example.project.sanatanApp.presentation.components.PlatformConfiguration
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenAction
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenState
 
-class MantraScreenViewModel(private val repo : MantraRepo) :ViewModel(){
+class MantraScreenViewModel(private val repo : MantraRepo,private val screenSize: PlatformConfiguration) :ViewModel(){
 
     private val _uiState = MutableStateFlow(MantraScreenState())
     val uiState = _uiState.asStateFlow()
@@ -41,5 +42,8 @@ class MantraScreenViewModel(private val repo : MantraRepo) :ViewModel(){
                 .onSuccess {result-> _uiState.update { it.copy(mantraList = result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
+    }
+    fun getScreenSize():Pair<Float,Float>{
+        return Pair(screenSize.screenWidth(),screenSize.screenHeight())
     }
 }

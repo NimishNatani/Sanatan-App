@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class YoutubeDto(
-    val status:String,
-    val subtitles:String
+    val errorMessage:String,
+    val subtitles:String,
+    val title:String
 )
