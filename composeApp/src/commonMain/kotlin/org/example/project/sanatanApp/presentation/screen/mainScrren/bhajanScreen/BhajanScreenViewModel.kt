@@ -30,27 +30,27 @@ class BhajanScreenViewModel(private val repo:BhajanRepo,private val screenSize: 
             }
             is BhajanScreenAction.OnLoadingBhajan -> {
                 _uiState.value = _uiState.value.copy(isLoading = false)
-                getAllBhajan()
+                getBhajanByName(action.name)
             }
 
             is BhajanScreenAction.OnLoadingBhajanKalakar -> {
                 _uiState.value = _uiState.value.copy(isLoading = false)
-                getAllBhajanKalakar()
+                getBhajanKalakarByName(action.name)
             }
         }
     }
 
-    private fun getAllBhajan(){
+    private fun getBhajanByName(name:String){
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getAllBhajan()
-                .onSuccess {result-> _uiState.update { it.copy(bhajanList = result, isLoading = false) } }
+            repo.getBhajanByName(name)
+                .onSuccess {result-> _uiState.update { it.copy(bhajan = result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
     }
-    private fun getAllBhajanKalakar(){
+    private fun getBhajanKalakarByName(name:String){
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getAllBhajanKalakar()
-                .onSuccess {result-> _uiState.update { it.copy(bhajanKalakarList =  result, isLoading = false) } }
+            repo.getBhajanKalakarByName(name)
+                .onSuccess {result-> _uiState.update { it.copy(bhajanKalakar =  result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
     }

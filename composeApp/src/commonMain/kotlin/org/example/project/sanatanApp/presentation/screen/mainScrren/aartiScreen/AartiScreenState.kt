@@ -7,5 +7,5 @@ data class AartiScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
-    val aartiList : List<Aarti> = emptyList(),
+    val aarti : Aarti? = null,
 )

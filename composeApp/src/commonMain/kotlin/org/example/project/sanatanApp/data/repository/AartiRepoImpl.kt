@@ -8,7 +8,7 @@ import org.example.project.sanatanApp.data.mappers.toAarti
 import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.repository.AartiRepo
 
-class AartiRepoImpl(val apiService: AartiApi): AartiRepo  {
+class AartiRepoImpl(val apiService: AartiApi) : AartiRepo {
     override suspend fun getAllAarti(): Result<List<Aarti>, DataError.Remote> {
         return apiService.getAllAarti().map { aartiDtoList ->
             aartiDtoList.map { aartiDto ->
@@ -17,8 +17,10 @@ class AartiRepoImpl(val apiService: AartiApi): AartiRepo  {
         }
     }
 
-    override suspend fun getAartiByName(): Aarti {
-        TODO("Not yet implemented")
+    override suspend fun getAartiByName(name: String): Result<Aarti, DataError.Remote> {
+        return apiService.getAartiByName().map { aartiDto ->
+            aartiDto.toAarti()
+        }
     }
 
 }

@@ -30,14 +30,22 @@ class AartiScreenViewModel(private val repo: AartiRepo,private val screenSize: P
 
             is AartiScreenAction.OnLoadingAarti -> {
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                getAllAarti()
+                getAartiByName(action.name)
             }
         }
     }
 
-    private fun getAllAarti() {
+    private fun getAllAarti(name:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getAllAarti()
+            repo.getAllAarti(name)
+                .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
+                .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
+        }
+    }
+
+    private fun getAartiByName(name:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAartiByName(name)
                 .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }

@@ -29,4 +29,20 @@ class BhajanApi(private val client: HttpClient) {
         }
     }
 
+    suspend fun getBhajanByName(): Result<BhajanDto,DataError.Remote> {
+        return safeCall<BhajanDto> {
+            client.get("${BASE_URL}/allBhajan") {
+
+            }
+        }
+    }
+
+    suspend fun getBhajanKalakarByName(): Result<BhajanDto,DataError.Remote> {
+        return safeCall<BhajanDto> {
+            client.get("${BASE_URL}/allBhajanKalakar") {
+
+            }
+        }
+    }
+
 }

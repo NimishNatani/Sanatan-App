@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.sanatanApp.domain.model.Aarti
+import org.example.project.sanatanApp.domain.model.Link
 import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
@@ -39,8 +40,9 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun AartiScreenRoot(
     viewModel: AartiScreenViewModel = koinViewModel(),
+    name: String,
     onBackClick: () -> Unit,
-    onAartiClick: (aarti: Aarti) -> Unit
+    onAartiClick: (link: String) -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -48,8 +50,8 @@ fun AartiScreenRoot(
 
     AartiScreen(state = state, onAction = {
         viewModel.onAction(it)
-    }, onBackClick = { onBackClick() },
-        onAartiClick = { aarti -> onAartiClick(aarti) },
+    },name = name, onBackClick = { onBackClick() },
+        onAartiClick = { link -> onAartiClick(link) },
         screenSize = screenSize
     )
 }
@@ -58,18 +60,20 @@ fun AartiScreenRoot(
 fun AartiScreen(
     state: AartiScreenState,
     onAction: (AartiScreenAction) -> Unit,
+    name: String,
     onBackClick: () -> Unit,
-    onAartiClick: (aarti: Aarti) -> Unit,
+    onAartiClick: (link: String) -> Unit,
     screenSize: Pair<Float, Float>
 ) {
     LaunchedEffect(Unit) {
-        onAction(AartiScreenAction.OnLoadingAarti)
+        onAction(AartiScreenAction.OnLoadingAarti(name))
     }
     if (state.isLoading) {
         ShimmerEffect()
     } else if (state.errorMessage != null) {
 
-    } else if (state.aartiList != emptyList<Aarti>()) {
+    } else if (state.aarti != null) {
+        val thumbnails= splitAartiLinks(state.aarti)
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
                 onAction(AartiScreenAction.OnSearchQueryChange(it))
@@ -107,34 +111,28 @@ fun AartiScreen(
                 Spacer(modifier = Modifier.height(15.dp))
                 Text("आरती चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val aartiRecommendedIndex1 = remember { mutableStateOf(0) }
-                val aartiRecommendedItems1 = extractSecondThumbnails(state.aartiList, 0)
+                val aartiRecommendedItems1 = thumbnails.first
+                val aartiRecommendedItems2 = thumbnails.second
                 val aartiLastRecommendedSwipeTime1 = remember { mutableStateOf(0L) }
                 SwappableBox(
                     aartiRecommendedIndex1,
-                    listOf(""),
-                    aartiLastRecommendedSwipeTime1,
-                    items = aartiRecommendedItems1, onClick = { name ->
-                        onAartiClick(findAartiByName(state.aartiList, name)!!)
+                    item = aartiRecommendedItems1,
+                    aartiLastRecommendedSwipeTime1, onClick = { name ->
+                        onAartiClick(getLinkUrlByThumbnail(state.aarti, name)!!)
+                    },
+                    height = 120.dp,
+                    width = (screenSize.first.toInt() / 2 - 16).dp
+                )
+                SwappableBox(
+                    aartiRecommendedIndex1,
+                    item = aartiRecommendedItems2,
+                    aartiLastRecommendedSwipeTime1, onClick = { name ->
+                        onAartiClick(getLinkUrlByThumbnail(state.aarti, name)!!)
                     },
                     height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableDots(aartiRecommendedItems1.size, aartiRecommendedIndex1, Modifier)
-
-                val aartiRecommendedIndex2 = remember { mutableStateOf(0) }
-                val aartiRecommendedItems2 = extractSecondThumbnails(state.aartiList, 1)
-                val aartiLastRecommendedSwipeTime2 = remember { mutableStateOf(0L) }
-                SwappableBox(
-                    aartiRecommendedIndex2,
-                    listOf(""),
-                    aartiLastRecommendedSwipeTime2,
-                    items = aartiRecommendedItems2, onClick = { name ->
-                        onAartiClick(findAartiByName(state.aartiList, name)!!)
-                    },
-                    height = 120.dp,
-                    width = (screenSize.first.toInt() / 2 - 16).dp
-                )
-                SwappableDots(aartiRecommendedItems2.size, aartiRecommendedIndex2, Modifier)
 
                 Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
@@ -160,6 +158,20 @@ fun getFirstAartiLink(aartiList: List<Aarti>, name: String): String? {
     return aartiList.find { it.name == name }  // Find Aarti by name
         ?.aarti?.values?.firstOrNull()  // Get first Link object
         ?.link  // Extract link
+}
+
+fun splitAartiLinks(aarti: Aarti): Pair<List<String>, List<String>> {
+    val thumbnails  = aarti.aarti.values.map { it.thumbnail }
+    val halfSize = thumbnails.size / 2
+
+    val firstHalf = thumbnails.take(halfSize)
+    val secondHalf = thumbnails.drop(halfSize)
+
+    return firstHalf to secondHalf
+}
+
+fun getLinkUrlByThumbnail(aarti: Aarti, thumbnail: String): String? {
+    return aarti.aarti.values.find { it.thumbnail == thumbnail }?.link
 }
 
 private fun extractSecondThumbnails(

@@ -7,6 +7,6 @@ data class BhajanScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
-    val bhajanList : List<Bhajan> = emptyList(),
-    val bhajanKalakarList : List<Bhajan> = emptyList()
+    val bhajan : Bhajan? = null,
+    val bhajanKalakar : Bhajan? = null
 )

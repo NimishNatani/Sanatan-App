@@ -19,6 +19,12 @@ class StorageViewModel():ViewModel() {
     private val _mantra = MutableStateFlow<Pair<Mantra,Int>?>(null)
     val mantraState = _mantra.asStateFlow()
 
+    private val _bhagwanName = MutableStateFlow<Pair<String,Boolean>?>(null)
+    val bhagwanNameState = _bhagwanName.asStateFlow()
+
+    private val _link = MutableStateFlow<String?>(null)
+    val linkState = _link.asStateFlow()
+
     fun setAarti(aarti:Aarti){
         _listType.value = "Aarti"
         _aarti.value = aarti
@@ -31,5 +37,13 @@ class StorageViewModel():ViewModel() {
     fun setMantra(mantra:Mantra,type:Int){
         _listType.value="Mantra"
         _mantra.value = Pair(mantra,type)
+    }
+
+    fun setBhagwanName(name:String,isKalakar:Boolean){
+        _bhagwanName.value = Pair(name,isKalakar)
+    }
+
+    fun setLink(link:String){
+        _link.value = link
     }
 }

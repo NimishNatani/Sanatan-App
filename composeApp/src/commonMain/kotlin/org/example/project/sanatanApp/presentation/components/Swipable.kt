@@ -110,25 +110,24 @@ fun SwappableBox(
     totalItems: Int=4,
     height:Dp=80.dp,
     width:Dp=80.dp,
-    items: List<Pair<String,String>> = listOf( Pair("", "")),
     onClick:(name:String)->Unit = {}
 ){
     Row(
         modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp)
             .swipeGesture(
                 recommendedIndex,
-                items.size,
+                item.size,
                 lastRecommendedSwipeTime
             ),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         repeat(totalItems) { offset ->
             val index =
-                (recommendedIndex.value + offset) % items.size
+                (recommendedIndex.value + offset) % item.size
             Box(
                 modifier = Modifier.size(height=height, width = width).clip(
                     RoundedCornerShape(4.dp)
-                ).clickable { onClick(items[index].first) }
+                ).clickable { onClick(item[index]) }
                     .border(
                         BorderStroke((0.5).dp, Orange),
                         RoundedCornerShape(4.dp)
@@ -137,7 +136,7 @@ fun SwappableBox(
                 contentAlignment = Alignment.Center
             ) {
                 KamelImage(
-                    { asyncPainterResource(data = Url(items[index].second)) },
+                    { asyncPainterResource(data = Url(item[index])) },
                     contentDescription = "Image",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier

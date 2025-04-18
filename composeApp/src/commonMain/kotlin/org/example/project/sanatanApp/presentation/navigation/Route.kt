@@ -22,7 +22,13 @@ sealed interface Route {
     data object MainScreen : Route
 
     @Serializable
+    data object AartiBhagwanScreen :Route
+
+    @Serializable
     data object AartiScreen :Route
+
+    @Serializable
+    data object BhajanBhagwanScreen :Route
 
     @Serializable
     data object BhajanScreen :Route

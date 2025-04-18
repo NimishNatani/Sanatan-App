@@ -20,4 +20,12 @@ class AartiApi(private val client: HttpClient) {
         }
     }
 
+    suspend fun getAartiByName(): Result<AartiDto,DataError.Remote> {
+        return safeCall<AartiDto>{
+            client.get("${BASE_URL}/allAarti") {
+
+            }
+        }
+    }
+
 }

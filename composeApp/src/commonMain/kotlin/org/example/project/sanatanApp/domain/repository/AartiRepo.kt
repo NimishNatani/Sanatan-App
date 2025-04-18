@@ -6,5 +6,5 @@ import org.example.project.sanatanApp.domain.model.Aarti
 
 interface AartiRepo {
     suspend fun getAllAarti(): Result<List<Aarti>,DataError.Remote>
-    suspend fun getAartiByName():Aarti
+    suspend fun getAartiByName(name:String): Result<Aarti,DataError.Remote>
 }

@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
-import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.model.Bhajan
 import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
@@ -41,41 +40,48 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun BhajanScreenRoot(
     viewModel: BhajanScreenViewModel = koinViewModel(),
+    name: String,
+    isKalakar: Boolean,
     onBackClick: () -> Unit,
-    onBhajanClick: (bhajan: Bhajan) -> Unit
+    onBhajanClick: (link: String) -> Unit
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val screenSize = viewModel.getScreenSize()
 
-
     BhajanScreen(state = state, onAction = {
         viewModel.onAction(it)
     }, onBackClick = { onBackClick() },
-        onBhajanClick = { bhajan -> onBhajanClick(bhajan) },
-        screenSize = screenSize)
+        onBhajanClick = { link -> onBhajanClick(link) },
+        screenSize = screenSize, name = name, isKalakar = isKalakar
+    )
 }
 
 @Composable
 fun BhajanScreen(
     state: BhajanScreenState,
+    name: String,
+    isKalakar: Boolean,
     onAction: (BhajanScreenAction) -> Unit,
     onBackClick: () -> Unit,
-    onBhajanClick: (bhajan: Bhajan) -> Unit,
+    onBhajanClick: (link: String) -> Unit,
     screenSize: Pair<Float, Float>
 ) {
 
     LaunchedEffect(Unit) {
-        onAction(BhajanScreenAction.OnLoadingBhajan)
-        onAction(BhajanScreenAction.OnLoadingBhajanKalakar)
+        if (isKalakar) {
+            onAction(BhajanScreenAction.OnLoadingBhajanKalakar(name))
+        } else {
+            onAction(BhajanScreenAction.OnLoadingBhajan(name))
+        }
     }
     if (state.isLoading) {
-ShimmerEffect()
+        ShimmerEffect()
     } else if (state.errorMessage != null) {
 
-    } else if (state.bhajanList != emptyList<Aarti>() && state.bhajanKalakarList != emptyList<Aarti>()) {
-
+    } else if (state.bhajan != null && state.bhajanKalakar != null) {
+        val thumbnail = splitBhajanLinks(state.bhajan)
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
                 onAction(BhajanScreenAction.OnSearchQueryChange(it))
@@ -111,40 +117,35 @@ ShimmerEffect()
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
-                Text("भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+                Text(
+                    if (isKalakar) {
+                        "प्रमुख कलाकार"
+                    } else "भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp)
+                )
                 val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
-                val bhagwanRecommendedItems = extractFirstThumbnails(state.bhajanList)
+                val bhagwanRecommendedItems1 = thumbnail.first
+                val bhagwanRecommendedItems2 = thumbnail.second
                 val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
                 SwappableBox(
                     bhagwanRecommendedIndex,
-                    listOf(""),
+                    bhagwanRecommendedItems1,
                     bhagwanLastRecommendedSwipeTime, onClick = { name ->
-                        onBhajanClick(findBhajanByName(state.bhajanList, name)!!)
-                    }, items = bhagwanRecommendedItems,
+                        onBhajanClick(getLinkUrlByThumbnail(state.bhajan, name)!!)
+                    },
                     height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
-                SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
-
-
-                Text("प्रमुख कलाकार", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-                val kalakarRecommendedIndex = remember { mutableStateOf(0) }
-                val kalakarRecommendedItems =
-                    extractFirstThumbnails(state.bhajanKalakarList)
-                val kalakarLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-
                 SwappableBox(
-                    kalakarRecommendedIndex,
-                    listOf(""),
-                    kalakarLastRecommendedSwipeTime, onClick = { name ->
-                        onBhajanClick(findBhajanByName(state.bhajanKalakarList, name)!!)
-                    }, items = kalakarRecommendedItems,
+                    bhagwanRecommendedIndex,
+                    bhagwanRecommendedItems2,
+                    bhagwanLastRecommendedSwipeTime, onClick = { name ->
+                        onBhajanClick(getLinkUrlByThumbnail(state.bhajan, name)!!)
+                    },
                     height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
-                SwappableDots(kalakarRecommendedItems.size, kalakarRecommendedIndex, Modifier)
-
+                SwappableDots(bhagwanRecommendedItems1.size, bhagwanRecommendedIndex, Modifier)
 
                 Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val recommendedIndex = remember { mutableStateOf(0) }
@@ -165,14 +166,16 @@ ShimmerEffect()
     }
 }
 
-private fun extractFirstThumbnails(bhajanList: List<Bhajan>): List<Pair<String, String>> {
-    return bhajanList.mapNotNull { bhajan ->
-        val firstThumbnail =
-            bhajan.bhajan.values.firstOrNull { it.thumbnail.isNotEmpty() }?.thumbnail
-        firstThumbnail?.let { bhajan.name to it }
-    }
+fun splitBhajanLinks(bhajan: Bhajan): Pair<List<String>, List<String>> {
+    val thumbnails = bhajan.bhajan.values.map { it.thumbnail }
+    val halfSize = thumbnails.size / 2
+
+    val firstHalf = thumbnails.take(halfSize)
+    val secondHalf = thumbnails.drop(halfSize)
+
+    return firstHalf to secondHalf
 }
 
-private fun findBhajanByName(bhajanList: List<Bhajan>, name: String): Bhajan? {
-    return bhajanList.find { it.name == name }  // Find the Aarti by name
+fun getLinkUrlByThumbnail(bhajan: Bhajan, thumbnail: String): String? {
+    return bhajan.bhajan.values.find { it.thumbnail == thumbnail }?.link
 }

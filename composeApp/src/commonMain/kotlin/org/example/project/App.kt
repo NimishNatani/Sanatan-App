@@ -18,8 +18,10 @@ import org.example.project.sanatanApp.presentation.navigation.Route
 import org.example.project.sanatanApp.presentation.screen.logo.SplashScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.MainScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiBhagwanScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenViewModel
+import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanBhagwanScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenRoot
@@ -73,26 +75,51 @@ fun App() {
                         }
                     })
                 }
+                composable<Route.AartiBhagwanScreen> {
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
+                    AartiBhagwanScreenRoot(
+                        onBackClick = { navController.popBackStack() },
+                        onBhagwanClick = { name -> sharedUserViewModel.setBhagwanName(name,false)
+                            navController.navigate(Route.AartiScreen)})
+                }
                 composable<Route.AartiScreen> {
                     val viewModel = koinViewModel<AartiScreenViewModel>()
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
-                    AartiScreenRoot(
+                    sharedUserViewModel.bhagwanNameState.value?.let { value ->
+                        AartiScreenRoot(
+                            viewModel = viewModel,
+                            name  = value.first,
+                            onBackClick = { navController.popBackStack() },
+                            onAartiClick = { link -> sharedUserViewModel.setLink(link)
+                                navController.navigate(Route.YoutubeScreen)})
+                    }
+
+                }
+                composable<Route.BhajanBhagwanScreen>{
+                    val viewModel = koinViewModel<BhajanScreenViewModel>()
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
+                    BhajanBhagwanScreenRoot(
                         viewModel = viewModel,
                         onBackClick = { navController.popBackStack() },
-                        onAartiClick = { aarti -> sharedUserViewModel.setAarti(aarti)
-                        navController.navigate(Route.YoutubeScreen)})
+                        onBhajanClick = { name,isKalakar -> sharedUserViewModel.setBhagwanName(name,isKalakar)
+                            navController.navigate(Route.BhajanScreen)})
                 }
                 composable<Route.BhajanScreen> {
                     val viewModel = koinViewModel<BhajanScreenViewModel>()
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
+                    sharedUserViewModel.bhagwanNameState.value?.let { value ->
                     BhajanScreenRoot(
                         viewModel = viewModel,
+                        name = value.first,
+                        isKalakar = value.second,
                         onBackClick = { navController.popBackStack() },
                         onBhajanClick = { bhajan -> sharedUserViewModel.setBhajan(bhajan)
                         navController.navigate(Route.YoutubeScreen)}
-                        )
+                        )}
                 }
                 composable<Route.GranthScreen> {
                     val viewModel = koinViewModel<GranthScreenViewModel>()
@@ -160,10 +187,10 @@ fun App() {
                             YoutubeScreenRoot(url = url.value)
                         }
                     }
-                    sharedUserViewModel.aartiState.value?.let {
-                        aarti->
+                    sharedUserViewModel.linkState.value?.let {
+                        link->
                         YoutubeScreenRoot(
-                            url = aarti.aarti.values.firstOrNull()?.link,
+                            url = link,
                         )
 
                     }
