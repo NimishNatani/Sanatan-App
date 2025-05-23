@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
+import org.example.project.sanatanApp.presentation.components.BhagwanSwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
@@ -92,59 +93,39 @@ fun BhajanBhagwanScreen(
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
                 }
-                SwappableDots(totalItems, selectedIndex, Modifier)
+                SwappableDots( selectedIndex, Modifier,totalItems,)
             }
 
             Spacer(modifier = Modifier.height(15.dp))
             Text("भजन चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
             val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
-            val bhagwanRecommendedItems = listOf(
-                "hanumanji",
-                "durgaji",
-                "ganeshji",
-                "laxmiji",
-                "saraswatiji",
-                "shivji",
-                "vishnuji"
-            )
             val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-            SwappableBox(
+            BhagwanSwappableBox(
                 bhagwanRecommendedIndex,
-                bhagwanRecommendedItems,
                 bhagwanLastRecommendedSwipeTime, onClick = { name ->
                     onBhajanClick(name,false)
                 },
                 height = 80.dp,
                 width = (screenSize.first.toInt() / 4 - 10).dp
             )
-            SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
+            SwappableDots( bhagwanRecommendedIndex, Modifier)
 
 
             Text("प्रमुख कलाकार", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
             val kalakarRecommendedIndex = remember { mutableStateOf(0) }
-            val kalakarRecommendedItems =
-                listOf(
-                    "hanumanji",
-                    "durgaji",
-                    "ganeshji",
-                    "laxmiji",
-                    "saraswatiji",
-                    "shivji",
-                    "vishnuji"
-                )
+
             val kalakarLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-            SwappableBox(
+            BhagwanSwappableBox(
                 kalakarRecommendedIndex,
-                kalakarRecommendedItems,
                 kalakarLastRecommendedSwipeTime, onClick = { name ->
                     onBhajanClick(name,true)
                 },
                 height = 80.dp,
                 width = (screenSize.first.toInt() / 4 - 10).dp
             )
-            SwappableDots(kalakarRecommendedItems.size, kalakarRecommendedIndex, Modifier)
+            SwappableDots( kalakarRecommendedIndex, Modifier)
 
 
             Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
@@ -152,15 +133,13 @@ fun BhajanBhagwanScreen(
             val recommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
             val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-            SwappableBox(
+            BhagwanSwappableBox(
                 recommendedIndex,
-                recommendedItems,
                 lastRecommendedSwipeTime,
-                2,
-                120.dp,
-                160.dp
+                height = 120.dp,
+                width = 160.dp
             )
-            SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
+            SwappableDots( recommendedIndex, Modifier)
         }
     }
 }

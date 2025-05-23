@@ -31,15 +31,15 @@ class MantraScreenViewModel(private val repo : MantraRepo,private val screenSize
 
             is MantraScreenAction.OnLoadingMantra -> {
                 _uiState.value = _uiState.value.copy(isLoading = true)
-                getAllMantra()
+                getMantraByName(action.name)
             }
         }
     }
 
-    private fun getAllMantra() {
+    private fun getMantraByName(name:String) {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getAllMantra()
-                .onSuccess {result-> _uiState.update { it.copy(mantraList = result, isLoading = false) } }
+            repo.getMantraByName(name)
+                .onSuccess {result-> _uiState.update { it.copy(mantra = result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
     }

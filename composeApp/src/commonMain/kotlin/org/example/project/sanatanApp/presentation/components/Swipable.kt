@@ -1,12 +1,14 @@
 package org.example.project.sanatanApp.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -36,11 +41,43 @@ import kotlinx.datetime.Clock
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.White
 import org.example.project.core.presentation.lightOrange
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+import sanatanapp.composeapp.generated.resources.Res
+import sanatanapp.composeapp.generated.resources.durga_ji
+import sanatanapp.composeapp.generated.resources.hanumanji
+import sanatanapp.composeapp.generated.resources.laxmiji
+import sanatanapp.composeapp.generated.resources.ramji
+import sanatanapp.composeapp.generated.resources.saraswatiji
+import sanatanapp.composeapp.generated.resources.shivji
+import sanatanapp.composeapp.generated.resources.vishnuji
 import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 
 private const val SWIPE_THRESHOLD = 100f
 private val SWIPE_DELAY = 300.milliseconds
+
+val bhagwanList =
+    listOf(
+        Pair("hanumanji", Res.drawable.hanumanji),
+        Pair("durgaji", Res.drawable.durga_ji),
+        Pair("ganeshji", Res.drawable.ramji),
+        Pair("laxmiji", Res.drawable.laxmiji),
+        Pair("saraswatiji", Res.drawable.saraswatiji),
+        Pair("shivji", Res.drawable.shivji),
+        Pair("vishnuji", Res.drawable.vishnuji)
+    )
+
+val kalakarList =
+    listOf(
+        Pair("lakhbir_singh_lakkha", Res.drawable.hanumanji),
+        Pair("anoop_jalota", Res.drawable.durga_ji),
+        Pair("anuradha_paudwal", Res.drawable.ramji),
+        Pair("kanhaiya_mittal", Res.drawable.laxmiji),
+        Pair("gulshan_kumar", Res.drawable.saraswatiji),
+        Pair("rajan_ji", Res.drawable.shivji),
+        Pair("chotu_singh_raavana", Res.drawable.vishnuji)
+    )
 
 @Composable
 fun Modifier.swipeGesture(
@@ -84,7 +121,11 @@ fun Modifier.swipeGesture(
 }
 
 @Composable
-fun SwappableDots(totalItems: Int, selectedIndex: MutableState<Int>, modifier: Modifier) {
+fun SwappableDots(
+    selectedIndex: MutableState<Int>,
+    modifier: Modifier,
+    totalItems: Int = bhagwanList.size,
+) {
     Row(
         modifier = modifier.padding(top = 4.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
@@ -105,13 +146,13 @@ fun SwappableDots(totalItems: Int, selectedIndex: MutableState<Int>, modifier: M
 @Composable
 fun SwappableBox(
     recommendedIndex: MutableState<Int>,
-    item:List<String> = listOf(""),
     lastRecommendedSwipeTime: MutableState<Long>,
-    totalItems: Int=4,
-    height:Dp=80.dp,
-    width:Dp=80.dp,
-    onClick:(name:String)->Unit = {}
-){
+    item: List<Pair<String, String>>,
+    totalItems: Int = 4,
+    height: Dp = 80.dp,
+    width: Dp = 80.dp,
+    onClick: (name: String) -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp)
             .swipeGesture(
@@ -119,15 +160,15 @@ fun SwappableBox(
                 item.size,
                 lastRecommendedSwipeTime
             ),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = if(item.size==1){Arrangement.Center} else Arrangement.SpaceEvenly
     ) {
-        repeat(totalItems) { offset ->
+        repeat(item.size) { offset ->
             val index =
                 (recommendedIndex.value + offset) % item.size
             Box(
-                modifier = Modifier.size(height=height, width = width).clip(
+                modifier = Modifier.size(height = height, width = width).clip(
                     RoundedCornerShape(4.dp)
-                ).clickable { onClick(item[index]) }
+                ).clickable { onClick(item[index].first) }
                     .border(
                         BorderStroke((0.5).dp, Orange),
                         RoundedCornerShape(4.dp)
@@ -135,8 +176,55 @@ fun SwappableBox(
                     .padding(8.dp),
                 contentAlignment = Alignment.Center
             ) {
-                KamelImage(
-                    { asyncPainterResource(data = Url(item[index])) },
+                    KamelImage(
+                        { asyncPainterResource(data = Url(item[index].first)) },
+                        contentDescription = "Image",
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+
+        }
+    }
+}
+
+@Composable
+fun BhagwanSwappableBox(
+    recommendedIndex: MutableState<Int>,
+    lastRecommendedSwipeTime: MutableState<Long>,
+    bhagwanListItems:List<Pair<String,DrawableResource>> = bhagwanList,
+    totalItems: Int = 4,
+    height: Dp = 80.dp,
+    width: Dp = 80.dp,
+    onClick: (name: String) -> Unit = {}
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp)
+            .swipeGesture(
+                recommendedIndex,
+                bhagwanListItems.size,
+                lastRecommendedSwipeTime
+            ),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        repeat(totalItems) { offset ->
+            val index =
+                (recommendedIndex.value + offset) % bhagwanListItems.size
+            Box(
+                modifier = Modifier.size(height = height, width = width).clip(
+                    RoundedCornerShape(4.dp)
+                ).clickable { onClick(bhagwanListItems[index].first) }
+                    .border(
+                        BorderStroke((0.5).dp, Orange),
+                        RoundedCornerShape(4.dp)
+                    ).background(White)
+                    .padding(vertical = 8.dp, horizontal = 4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(bhagwanListItems[index].second),
                     contentDescription = "Image",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
@@ -145,6 +233,41 @@ fun SwappableBox(
             }
             Spacer(modifier = Modifier.width(10.dp))
 
+        }
+    }
+}
+
+@Composable
+fun forYou(width: Dp){
+    Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 5.dp),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(bhagwanList.take(4)) { item ->
+            Box(
+                modifier = Modifier
+                    .size(width =width, height = 100.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { /* Handle click */ }
+                    .border(
+                        BorderStroke(0.5.dp, Orange),
+                        RoundedCornerShape(4.dp)
+                    )
+                    .background(White)
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(item.second),
+                    contentDescription = "Image",
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
     }
 }

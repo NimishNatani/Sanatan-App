@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
-import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.model.Mantra
+import org.example.project.sanatanApp.presentation.components.BhagwanSwappableBox
 import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
@@ -40,8 +40,9 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun MantraScreenRoot(
     viewModel: MantraScreenViewModel = koinViewModel(),
+    name: String,
     onBackClick: () -> Unit,
-    onMantraClick: (mantra: Mantra, type: Int) -> Unit
+    onMantraClick: (link: String) -> Unit
 ) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,25 +52,26 @@ fun MantraScreenRoot(
     MantraScreen(state = state, onAction = {
         viewModel.onAction(it)
     }, onBackClick = { onBackClick() },
-        onMantraClick = { mantra, type -> onMantraClick(mantra, type) },
-        screenSize = screenSize)
+        onMantraClick = { mantra -> onMantraClick(mantra) },
+        screenSize = screenSize, name = name
+    )
 }
 
 
 @Composable
 fun MantraScreen(
     state: MantraScreenState, onAction: (MantraScreenAction) -> Unit, onBackClick: () -> Unit,
-    onMantraClick: (mantra: Mantra, type: Int) -> Unit,    screenSize: Pair<Float, Float>
-
+    onMantraClick: (link: String) -> Unit, screenSize: Pair<Float, Float>, name: String
 ) {
     LaunchedEffect(Unit) {
-        onAction(MantraScreenAction.OnLoadingMantra)
+        onAction(MantraScreenAction.OnLoadingMantra(name))
     }
     if (state.isLoading) {
         ShimmerEffect()
     } else if (state.errorMessage != null) {
 
-    } else if (state.mantraList != emptyList<Aarti>()) {
+    } else if (state.mantra != null) {
+        val thumbnails = splitMantraLinks(state.mantra)
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
                 onAction(MantraScreenAction.OnSearchQueryChange(it))
@@ -101,38 +103,35 @@ fun MantraScreen(
                         elevation = CardDefaults.cardElevation(8.dp)
                     ) {
                     }
-                    SwappableDots(totalItems, selectedIndex, Modifier)
+                    SwappableDots(selectedIndex, Modifier, totalItems)
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
                 Text(" मंत्र चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val mantraRecommendedIndex = remember { mutableStateOf(0) }
-                val mantraRecommendedItems = listOf(
-                    extractSecondThumbnails(state.mantraList, 0),
-                    extractSecondThumbnails(state.mantraList, 1),
-                    extractSecondThumbnails(state.mantraList, 2),
-                )
+                val mantraRecommendedItems1 = thumbnails.first
+                val mantraRecommendedItems2 = thumbnails.second
                 val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
                 SwappableBox(
                     mantraRecommendedIndex,
-                    listOf(""),
-                    mantraLastRecommendedSwipeTime, 2,
+                    mantraLastRecommendedSwipeTime,
+                    item = mantraRecommendedItems1,
                     onClick = { name ->
-                        onMantraClick(findMantraByName(state.mantraList, name)!!, 1)
-                    }, items = mantraRecommendedItems[0],height = 120.dp,
+                        onMantraClick(getLinkUrlByThumbnail(state.mantra, name)!!)
+                    }, height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableBox(
                     mantraRecommendedIndex,
-                    listOf(""),
-                    mantraLastRecommendedSwipeTime, 2,
+                    mantraLastRecommendedSwipeTime,
+                    item = mantraRecommendedItems2,
                     onClick = { name ->
-                        onMantraClick(findMantraByName(state.mantraList, name)!!, 2)
-                    }, items = mantraRecommendedItems[1],height = 120.dp,
+                        onMantraClick(getLinkUrlByThumbnail(state.mantra, name)!!)
+                    }, height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
-                SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
+                SwappableDots(mantraRecommendedIndex, Modifier, mantraRecommendedItems1.size)
 
 
                 Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
@@ -140,31 +139,29 @@ fun MantraScreen(
                 val recommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
                 val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-                SwappableBox(
+                BhagwanSwappableBox(
                     recommendedIndex,
-                    recommendedItems,
                     lastRecommendedSwipeTime,
-                    2,
-                    120.dp,
-                    160.dp
+                    height = 120.dp,
+                    width = 160.dp
                 )
-                SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
+                SwappableDots(recommendedIndex, Modifier)
             }
         }
     }
 }
 
-private fun extractSecondThumbnails(
-    mantraList: List<Mantra>,
-    index: Int
-): List<Pair<String, String>> {
-    return mantraList.mapNotNull { mantra ->
-        val secondThumbnail =
-            mantra.mantra.values.filter { it.thumbnail.isNotEmpty() }.getOrNull(index)?.thumbnail
-        secondThumbnail?.let { mantra.name to it }
-    }
+fun splitMantraLinks(mantra: Mantra): Pair<List<Pair<String, String>>, List<Pair<String, String>>> {
+    val thumbnailsWithNames = mantra.mantra.values.map { it.thumbnail to mantra.name }
+
+    val halfSize = thumbnailsWithNames.size / 2
+
+    val firstHalf = thumbnailsWithNames.take(halfSize)
+    val secondHalf = thumbnailsWithNames.drop(halfSize)
+
+    return firstHalf to secondHalf
 }
 
-private fun findMantraByName(mantraList: List<Mantra>, name: String): Mantra? {
-    return mantraList.find { it.name == name }  // Find the Aarti by name
+fun getLinkUrlByThumbnail(mantra: Mantra, thumbnail: String): String? {
+    return mantra.mantra.values.find { it.thumbnail == thumbnail }?.link
 }

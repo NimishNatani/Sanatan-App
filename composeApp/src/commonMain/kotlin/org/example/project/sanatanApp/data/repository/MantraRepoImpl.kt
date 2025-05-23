@@ -21,8 +21,10 @@ class MantraRepoImpl(private val apiService: MantraApi): MantraRepo {
         }
     }
 
-    override suspend fun getMantraByName(): Mantra {
-        TODO("Not yet implemented")
+    override suspend fun getMantraByName(name: String): Result<Mantra, DataError.Remote> {
+        return apiService.getMantraByName(name).map { mantraDto ->
+            mantraDto.toMantra()
+        }
     }
 
 }

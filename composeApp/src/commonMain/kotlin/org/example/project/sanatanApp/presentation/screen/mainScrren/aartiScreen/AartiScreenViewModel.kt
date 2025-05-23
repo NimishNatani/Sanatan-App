@@ -35,18 +35,12 @@ class AartiScreenViewModel(private val repo: AartiRepo,private val screenSize: P
         }
     }
 
-    private fun getAllAarti(name:String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.getAllAarti(name)
-                .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
-                .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
-        }
-    }
+
 
     private fun getAartiByName(name:String) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getAartiByName(name)
-                .onSuccess {result-> _uiState.update { it.copy(aartiList = result, isLoading = false) } }
+                .onSuccess {result-> _uiState.update { it.copy(aarti = result, isLoading = false) } }
                 .onError { error-> _uiState.update { it.copy(errorMessage = error.toString(), isLoading = false) } }
         }
     }

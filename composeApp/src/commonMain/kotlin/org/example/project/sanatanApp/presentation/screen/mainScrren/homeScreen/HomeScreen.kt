@@ -38,6 +38,7 @@ import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.core.presentation.TextSize
 import org.example.project.core.presentation.White
+import org.example.project.sanatanApp.presentation.components.BhagwanSwappableBox
 import org.example.project.sanatanApp.presentation.components.OrangeText
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
@@ -113,7 +114,7 @@ fun HomeScreen(
             ) {
 
             }
-            SwappableDots(totalItems, selectedIndex, Modifier)
+            SwappableDots( selectedIndex, Modifier,totalItems,)
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -164,15 +165,13 @@ fun HomeScreen(
         val recommendedItems = listOf("आपके लिए 1", "आपके लिए 2", "आपके लिए 3", "आपके लिए 4")
         val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-        SwappableBox(
+        BhagwanSwappableBox(
             recommendedIndex,
-            listOf(""),
             lastRecommendedSwipeTime,
-            2,
-            120.dp,
-            160.dp,
+            height = 120.dp,
+            width = 160.dp
         )
-        SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
+        SwappableDots( recommendedIndex, Modifier)
     }
 }
 

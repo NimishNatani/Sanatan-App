@@ -8,4 +8,4 @@ data class MantraScreenState(
     val searchQuery: String = "",
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
-    val mantraList : List<Mantra> = emptyList(),)
+    val mantra : Mantra? = null)

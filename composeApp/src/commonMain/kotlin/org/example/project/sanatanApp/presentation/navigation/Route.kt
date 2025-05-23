@@ -40,6 +40,9 @@ sealed interface Route {
     data object KathaScreen :Route
 
     @Serializable
+    data object MantraBhagwanScreen :Route
+
+    @Serializable
     data object MantraScreen :Route
 
     @Serializable

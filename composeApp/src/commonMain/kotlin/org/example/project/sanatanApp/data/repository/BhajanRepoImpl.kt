@@ -18,7 +18,7 @@ class BhajanRepoImpl(private val apiService: BhajanApi) : BhajanRepo {
     }
 
     override suspend fun getBhajanByName(name: String): Result<Bhajan, DataError.Remote> {
-        return apiService.getBhajanByName().map { bhajanDto ->
+        return apiService.getBhajanByName(name).map { bhajanDto ->
             bhajanDto.toBhajan()
         }
     }

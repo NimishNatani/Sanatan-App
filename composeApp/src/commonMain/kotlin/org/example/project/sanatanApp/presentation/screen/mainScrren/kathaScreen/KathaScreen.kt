@@ -57,76 +57,76 @@ fun KathaScreen(
     kathaListen: () -> Unit
 ) {
 
-    Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
-        TopBar(state.searchQuery, onSearchQueryChange = {
-            onAction(KathaScreenAction.OnSearchQueryChange(it))
-        }, onBackClick = { onBackClick() })
-        Spacer(modifier = Modifier.height(10.dp))
-        Column(
-            modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
-                .padding(horizontal = 10.dp),
-        ) {
-            val selectedIndex = remember { mutableStateOf(0) }
-            val totalItems = 4
-            val lastSwipeTime = remember { mutableStateOf(0L) }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Card(
-                    modifier = Modifier.fillMaxWidth().height(170.dp)
-                        .padding(vertical = 8.dp, horizontal = 10.dp).background(
-                            Gray
-                        ).clip(RoundedCornerShape(8.dp))
-                        .border(BorderStroke((0.5).dp, Orange), shape = RoundedCornerShape(8.dp))
-                        .align(Alignment.CenterHorizontally)
-                        .swipeGesture(selectedIndex, totalItems, lastSwipeTime),
-                    elevation = CardDefaults.cardElevation(8.dp)
-                ) {
-                }
-                SwappableDots(totalItems, selectedIndex, Modifier)
-            }
-
-            Spacer(modifier = Modifier.height(15.dp))
-            Text("कथा चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-            val mantraRecommendedIndex = remember { mutableStateOf(0) }
-            val mantraRecommendedItems = listOf(
-                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
-                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
-                listOf("  1", "  2", "  3", " 4", "5", "6", "7")
-            )
-            val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-
-            SwappableBox(
-                mantraRecommendedIndex,
-                mantraRecommendedItems[0],
-                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp, onClick = { kathaListen() }
-            )
-            SwappableBox(
-                mantraRecommendedIndex,
-                mantraRecommendedItems[1],
-                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
-            )
-            SwappableBox(
-                mantraRecommendedIndex,
-                mantraRecommendedItems[2],
-                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
-            )
-            SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
-
-
-            Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-            val recommendedIndex = remember { mutableStateOf(0) }
-            val recommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
-            val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
-
-            SwappableBox(
-                recommendedIndex,
-                recommendedItems,
-                lastRecommendedSwipeTime,
-                2,
-                120.dp,
-                160.dp
-            )
-            SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
-        }
-    }
+//    Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
+//        TopBar(state.searchQuery, onSearchQueryChange = {
+//            onAction(KathaScreenAction.OnSearchQueryChange(it))
+//        }, onBackClick = { onBackClick() })
+//        Spacer(modifier = Modifier.height(10.dp))
+//        Column(
+//            modifier = Modifier.fillMaxSize().background(Gray).verticalScroll(rememberScrollState())
+//                .padding(horizontal = 10.dp),
+//        ) {
+//            val selectedIndex = remember { mutableStateOf(0) }
+//            val totalItems = 4
+//            val lastSwipeTime = remember { mutableStateOf(0L) }
+//
+//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                Card(
+//                    modifier = Modifier.fillMaxWidth().height(170.dp)
+//                        .padding(vertical = 8.dp, horizontal = 10.dp).background(
+//                            Gray
+//                        ).clip(RoundedCornerShape(8.dp))
+//                        .border(BorderStroke((0.5).dp, Orange), shape = RoundedCornerShape(8.dp))
+//                        .align(Alignment.CenterHorizontally)
+//                        .swipeGesture(selectedIndex, totalItems, lastSwipeTime),
+//                    elevation = CardDefaults.cardElevation(8.dp)
+//                ) {
+//                }
+//                SwappableDots(totalItems, selectedIndex, Modifier)
+//            }
+//
+//            Spacer(modifier = Modifier.height(15.dp))
+//            Text("कथा चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+//            val mantraRecommendedIndex = remember { mutableStateOf(0) }
+//            val mantraRecommendedItems = listOf(
+//                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
+//                listOf("  1", "  2", "  3", " 4", "5", "6", "7"),
+//                listOf("  1", "  2", "  3", " 4", "5", "6", "7")
+//            )
+//            val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+//
+//            SwappableBox(
+//                mantraRecommendedIndex,
+//                mantraRecommendedItems[0],
+//                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp, onClick = { kathaListen() }
+//            )
+//            SwappableBox(
+//                mantraRecommendedIndex,
+//                mantraRecommendedItems[1],
+//                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
+//            )
+//            SwappableBox(
+//                mantraRecommendedIndex,
+//                mantraRecommendedItems[2],
+//                mantraLastRecommendedSwipeTime, 2, 80.dp, 150.dp
+//            )
+//            SwappableDots(mantraRecommendedItems[0].size, mantraRecommendedIndex, Modifier)
+//
+//
+//            Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
+//            val recommendedIndex = remember { mutableStateOf(0) }
+//            val recommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
+//            val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+//
+//            SwappableBox(
+//                recommendedIndex,
+//                recommendedItems,
+//                lastRecommendedSwipeTime,
+//                2,
+//                120.dp,
+//                160.dp
+//            )
+//            SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
+//        }
+//    }
 }

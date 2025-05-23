@@ -18,7 +18,7 @@ class AartiRepoImpl(val apiService: AartiApi) : AartiRepo {
     }
 
     override suspend fun getAartiByName(name: String): Result<Aarti, DataError.Remote> {
-        return apiService.getAartiByName().map { aartiDto ->
+        return apiService.getAartiByName(name).map { aartiDto ->
             aartiDto.toAarti()
         }
     }

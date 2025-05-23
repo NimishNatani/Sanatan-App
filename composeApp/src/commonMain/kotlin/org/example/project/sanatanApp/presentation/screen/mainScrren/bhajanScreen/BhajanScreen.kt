@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.sanatanApp.domain.model.Bhajan
+import org.example.project.sanatanApp.presentation.components.BhagwanSwappableBox
 import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
@@ -71,7 +72,7 @@ fun BhajanScreen(
 
     LaunchedEffect(Unit) {
         if (isKalakar) {
-            onAction(BhajanScreenAction.OnLoadingBhajanKalakar(name))
+//            onAction(BhajanScreenAction.OnLoadingBhajanKalakar(name))
         } else {
             onAction(BhajanScreenAction.OnLoadingBhajan(name))
         }
@@ -80,8 +81,9 @@ fun BhajanScreen(
         ShimmerEffect()
     } else if (state.errorMessage != null) {
 
-    } else if (state.bhajan != null && state.bhajanKalakar != null) {
-        val thumbnail = splitBhajanLinks(state.bhajan)
+    } else if (state.bhajan != null || state.bhajanKalakar != null) {
+        val bhajan = (state.bhajan ?: state.bhajanKalakar)!!
+        val thumbnail = splitBhajanLinks(bhajan)
         Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
             TopBar(state.searchQuery, onSearchQueryChange = {
                 onAction(BhajanScreenAction.OnSearchQueryChange(it))
@@ -113,7 +115,7 @@ fun BhajanScreen(
                         elevation = CardDefaults.cardElevation(8.dp)
                     ) {
                     }
-                    SwappableDots(totalItems, selectedIndex, Modifier)
+                    SwappableDots( selectedIndex, Modifier,totalItems,)
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
@@ -129,49 +131,49 @@ fun BhajanScreen(
 
                 SwappableBox(
                     bhagwanRecommendedIndex,
+                    bhagwanLastRecommendedSwipeTime,
                     bhagwanRecommendedItems1,
-                    bhagwanLastRecommendedSwipeTime, onClick = { name ->
-                        onBhajanClick(getLinkUrlByThumbnail(state.bhajan, name)!!)
+                    onClick = { name ->
+                        onBhajanClick(getLinkUrlByThumbnail(bhajan, name)!!)
                     },
                     height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
                 SwappableBox(
                     bhagwanRecommendedIndex,
+                    bhagwanLastRecommendedSwipeTime,
                     bhagwanRecommendedItems2,
-                    bhagwanLastRecommendedSwipeTime, onClick = { name ->
-                        onBhajanClick(getLinkUrlByThumbnail(state.bhajan, name)!!)
+                    onClick = { name ->
+                        onBhajanClick(getLinkUrlByThumbnail(bhajan, name)!!)
                     },
                     height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
-                SwappableDots(bhagwanRecommendedItems1.size, bhagwanRecommendedIndex, Modifier)
+                SwappableDots( bhagwanRecommendedIndex, Modifier,bhagwanRecommendedItems1.size,)
 
                 Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
                 val recommendedIndex = remember { mutableStateOf(0) }
                 val recommendedItems = listOf("  1", "  2", "  3", " 4", "5", "6", "7")
                 val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-                SwappableBox(
+                BhagwanSwappableBox(
                     recommendedIndex,
-                    recommendedItems,
                     lastRecommendedSwipeTime,
-                    2,
-                    120.dp,
-                    160.dp
+                    height = 120.dp,
+                    width = 160.dp
                 )
-                SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
+                SwappableDots( recommendedIndex, Modifier)
             }
         }
     }
 }
 
-fun splitBhajanLinks(bhajan: Bhajan): Pair<List<String>, List<String>> {
-    val thumbnails = bhajan.bhajan.values.map { it.thumbnail }
-    val halfSize = thumbnails.size / 2
+fun splitBhajanLinks(bhajan: Bhajan): Pair<List<Pair<String, String>>, List<Pair<String, String>>> {
+    val thumbnailsWithNames = bhajan.bhajan.values.map { it.thumbnail to bhajan.name }
+    val halfSize = thumbnailsWithNames.size / 2
 
-    val firstHalf = thumbnails.take(halfSize)
-    val secondHalf = thumbnails.drop(halfSize)
+    val firstHalf = thumbnailsWithNames.take(halfSize)
+    val secondHalf = thumbnailsWithNames.drop(halfSize)
 
     return firstHalf to secondHalf
 }

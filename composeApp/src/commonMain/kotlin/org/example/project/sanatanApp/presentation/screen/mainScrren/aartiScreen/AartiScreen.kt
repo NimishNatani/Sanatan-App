@@ -30,12 +30,15 @@ import org.example.project.core.presentation.Gray
 import org.example.project.core.presentation.Orange
 import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.model.Link
+import org.example.project.sanatanApp.presentation.components.BhagwanSwappableBox
 import org.example.project.sanatanApp.presentation.components.ShimmerEffect
 import org.example.project.sanatanApp.presentation.components.SwappableBox
 import org.example.project.sanatanApp.presentation.components.SwappableDots
 import org.example.project.sanatanApp.presentation.components.TopBar
+import org.example.project.sanatanApp.presentation.components.forYou
 import org.example.project.sanatanApp.presentation.components.swipeGesture
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.ceil
 
 @Composable
 fun AartiScreenRoot(
@@ -105,7 +108,7 @@ fun AartiScreen(
                         elevation = CardDefaults.cardElevation(8.dp)
                     ) {
                     }
-                    SwappableDots(totalItems, selectedIndex, Modifier)
+                    SwappableDots( selectedIndex, Modifier,totalItems,)
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
@@ -116,56 +119,42 @@ fun AartiScreen(
                 val aartiLastRecommendedSwipeTime1 = remember { mutableStateOf(0L) }
                 SwappableBox(
                     aartiRecommendedIndex1,
-                    item = aartiRecommendedItems1,
-                    aartiLastRecommendedSwipeTime1, onClick = { name ->
+
+                    aartiLastRecommendedSwipeTime1,
+                    aartiRecommendedItems1,onClick = { name ->
                         onAartiClick(getLinkUrlByThumbnail(state.aarti, name)!!)
                     },
                     height = 120.dp,
                     width = (screenSize.first.toInt() / 2 - 16).dp
                 )
-                SwappableBox(
-                    aartiRecommendedIndex1,
-                    item = aartiRecommendedItems2,
-                    aartiLastRecommendedSwipeTime1, onClick = { name ->
-                        onAartiClick(getLinkUrlByThumbnail(state.aarti, name)!!)
-                    },
-                    height = 120.dp,
-                    width = (screenSize.first.toInt() / 2 - 16).dp
-                )
-                SwappableDots(aartiRecommendedItems1.size, aartiRecommendedIndex1, Modifier)
+                if(aartiRecommendedItems2.isNotEmpty()) {
+                    SwappableBox(
+                        aartiRecommendedIndex1,
 
-                Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
-                val bhagwanRecommendedIndex = remember { mutableStateOf(0) }
-                val bhagwanRecommendedItems =
-                    listOf("  1", "  2", "  3", " 4", "5", "6", "7")
-                val bhagwanLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+                        aartiLastRecommendedSwipeTime1,
+                        item = aartiRecommendedItems2, onClick = { name ->
+                            onAartiClick(getLinkUrlByThumbnail(state.aarti, name)!!)
+                        },
+                        height = 120.dp,
+                        width = (screenSize.first.toInt() / 2 - 16).dp
+                    )
+                }
+                SwappableDots( aartiRecommendedIndex1, Modifier,aartiRecommendedItems1.size/2,)
 
-                SwappableBox(
-                    bhagwanRecommendedIndex,
-                    bhagwanRecommendedItems,
-                    bhagwanLastRecommendedSwipeTime,
-                    height = 100.dp,
-                    width = (screenSize.first.toInt() / 2 - 16).dp
-                )
-                SwappableDots(bhagwanRecommendedItems.size, bhagwanRecommendedIndex, Modifier)
+                forYou(width = (screenSize.first.toInt() / 2).dp)
 
             }
         }
     }
 }
 
-fun getFirstAartiLink(aartiList: List<Aarti>, name: String): String? {
-    return aartiList.find { it.name == name }  // Find Aarti by name
-        ?.aarti?.values?.firstOrNull()  // Get first Link object
-        ?.link  // Extract link
-}
 
-fun splitAartiLinks(aarti: Aarti): Pair<List<String>, List<String>> {
-    val thumbnails  = aarti.aarti.values.map { it.thumbnail }
-    val halfSize = thumbnails.size / 2
+fun splitAartiLinks(aarti: Aarti):  Pair<List<Pair<String, String>>, List<Pair<String, String>>> {
+    val thumbnails  = aarti.aarti.values.map { it.thumbnail to aarti.name }
+    val halfSize = ceil((thumbnails.size.toDouble()+1)/2)
 
-    val firstHalf = thumbnails.take(halfSize)
-    val secondHalf = thumbnails.drop(halfSize)
+    val firstHalf = thumbnails.take(halfSize.toInt())
+    val secondHalf = thumbnails.drop(halfSize.toInt())
 
     return firstHalf to secondHalf
 }
@@ -174,18 +163,3 @@ fun getLinkUrlByThumbnail(aarti: Aarti, thumbnail: String): String? {
     return aarti.aarti.values.find { it.thumbnail == thumbnail }?.link
 }
 
-private fun extractSecondThumbnails(
-    aartiList: List<Aarti>,
-    index: Int
-): List<Pair<String, String>> {
-    return aartiList.mapNotNull { aarti ->
-        val secondThumbnail =
-            aarti.aarti.values.filter { it.thumbnail.isNotEmpty() }.getOrNull(index)?.thumbnail
-        secondThumbnail?.let { aarti.name to it }
-    }
-}
-
-
-private fun findAartiByName(aartiList: List<Aarti>, name: String): Aarti? {
-    return aartiList.find { it.name == name }  // Find the Aarti by name
-}

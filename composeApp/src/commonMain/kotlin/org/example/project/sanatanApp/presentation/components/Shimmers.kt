@@ -103,26 +103,23 @@ fun ShimmerEffect() {
                     elevation = CardDefaults.cardElevation(8.dp)
                 ) {
                 }
-                SwappableDots(totalItems, selectedIndex, Modifier)
+                SwappableDots( selectedIndex, Modifier,totalItems,)
             }
 
             Spacer(modifier = Modifier.height(15.dp))
             Text(" मंत्र चुनें", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
             val mantraRecommendedIndex = remember { mutableStateOf(0) }
-            val mantraRecommendedItems = listOf(Pair("",""),Pair("",""),Pair("",""),Pair("",""))
             val mantraLastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
             SwappableBoxShimmerEffect(
                 mantraRecommendedIndex,
                 mantraLastRecommendedSwipeTime, 2,
-                items = mantraRecommendedItems,
             )
             SwappableBoxShimmerEffect(
                 mantraRecommendedIndex,
                 mantraLastRecommendedSwipeTime, 2,
-                items = mantraRecommendedItems
             )
-            SwappableDots(mantraRecommendedItems.size, mantraRecommendedIndex, Modifier)
+            SwappableDots( mantraRecommendedIndex, Modifier)
 
 
             Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
@@ -130,14 +127,13 @@ fun ShimmerEffect() {
             val recommendedItems = listOf(Pair("",""),Pair("",""),Pair("",""))
             val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
 
-            SwappableBoxShimmerEffect(
+            BhagwanSwappableBox(
                 recommendedIndex,
-                lastRecommendedSwipeTime,2,
-                items = recommendedItems,
-                120.dp,
-                160.dp
+                lastRecommendedSwipeTime,
+                height = 120.dp,
+                width = 160.dp
             )
-            SwappableDots(recommendedItems.size, recommendedIndex, Modifier)
+            SwappableDots( recommendedIndex, Modifier)
         }
     }
 }
