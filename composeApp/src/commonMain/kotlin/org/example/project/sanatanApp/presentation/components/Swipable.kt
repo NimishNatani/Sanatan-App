@@ -44,9 +44,16 @@ import org.example.project.core.presentation.lightOrange
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import sanatanapp.composeapp.generated.resources.Res
+import sanatanapp.composeapp.generated.resources.anoop_jalota
+import sanatanapp.composeapp.generated.resources.anuradha_paudwal
+import sanatanapp.composeapp.generated.resources.chotu_singh_raavana
 import sanatanapp.composeapp.generated.resources.durga_ji
+import sanatanapp.composeapp.generated.resources.gulshan_kumar
 import sanatanapp.composeapp.generated.resources.hanumanji
+import sanatanapp.composeapp.generated.resources.kanhaiya_mittal
+import sanatanapp.composeapp.generated.resources.lakhbir_singh_lakkha
 import sanatanapp.composeapp.generated.resources.laxmiji
+import sanatanapp.composeapp.generated.resources.rajan_ji
 import sanatanapp.composeapp.generated.resources.ramji
 import sanatanapp.composeapp.generated.resources.saraswatiji
 import sanatanapp.composeapp.generated.resources.shivji
@@ -70,13 +77,13 @@ val bhagwanList =
 
 val kalakarList =
     listOf(
-        Pair("lakhbir_singh_lakkha", Res.drawable.hanumanji),
-        Pair("anoop_jalota", Res.drawable.durga_ji),
-        Pair("anuradha_paudwal", Res.drawable.ramji),
-        Pair("kanhaiya_mittal", Res.drawable.laxmiji),
-        Pair("gulshan_kumar", Res.drawable.saraswatiji),
-        Pair("rajan_ji", Res.drawable.shivji),
-        Pair("chotu_singh_raavana", Res.drawable.vishnuji)
+        Pair("lakhbir_singh_lakkha", Res.drawable.lakhbir_singh_lakkha),
+        Pair("anoop_jalota", Res.drawable.anoop_jalota),
+        Pair("anuradha_paudwal", Res.drawable.anuradha_paudwal),
+        Pair("kanhaiya_mittal", Res.drawable.kanhaiya_mittal),
+        Pair("gulshan_kumar", Res.drawable.gulshan_kumar),
+        Pair("rajan_ji", Res.drawable.rajan_ji),
+        Pair("chotu_singh_raavana", Res.drawable.chotu_singh_raavana)
     )
 
 @Composable
@@ -194,14 +201,16 @@ fun SwappableBox(
 fun BhagwanSwappableBox(
     recommendedIndex: MutableState<Int>,
     lastRecommendedSwipeTime: MutableState<Long>,
-    bhagwanListItems:List<Pair<String,DrawableResource>> = bhagwanList,
+//    bhagwanListItems:List<Pair<String,DrawableResource>> = bhagwanList,
     totalItems: Int = 4,
     height: Dp = 80.dp,
     width: Dp = 80.dp,
+    isKalakar:Boolean=false,
     onClick: (name: String) -> Unit = {}
 ) {
+    val bhagwanListItems = if(isKalakar) kalakarList else bhagwanList
     Row(
-        modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp)
+        modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp,)
             .swipeGesture(
                 recommendedIndex,
                 bhagwanListItems.size,
@@ -242,7 +251,7 @@ fun forYou(width: Dp){
     Text("आपके लिए", fontSize = 18.sp, modifier = Modifier.padding(top = 8.dp))
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxWidth().height(500.dp),
         contentPadding = PaddingValues(horizontal = 5.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)

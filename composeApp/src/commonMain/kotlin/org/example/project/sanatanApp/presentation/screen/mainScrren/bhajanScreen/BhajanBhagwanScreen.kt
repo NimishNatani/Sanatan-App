@@ -62,7 +62,7 @@ fun BhajanBhagwanScreen(
     onBhajanClick: (name: String,isKalakar:Boolean) -> Unit,
     screenSize: Pair<Float, Float>
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 85.dp)) {
+    Column(modifier = Modifier.fillMaxSize().background(Gray).padding(bottom = 55.dp)) {
         TopBar(state.searchQuery, onSearchQueryChange = {
             onAction(BhajanScreenAction.OnSearchQueryChange(it))
         }, onBackClick = {
@@ -106,8 +106,9 @@ fun BhajanBhagwanScreen(
                 bhagwanLastRecommendedSwipeTime, onClick = { name ->
                     onBhajanClick(name,false)
                 },
-                height = 80.dp,
-                width = (screenSize.first.toInt() / 4 - 10).dp
+                height = 90.dp,
+                width = (screenSize.first.toInt() / 4 - 15).dp,
+                isKalakar = false
             )
             SwappableDots( bhagwanRecommendedIndex, Modifier)
 
@@ -122,8 +123,9 @@ fun BhajanBhagwanScreen(
                 kalakarLastRecommendedSwipeTime, onClick = { name ->
                     onBhajanClick(name,true)
                 },
-                height = 80.dp,
-                width = (screenSize.first.toInt() / 4 - 10).dp
+                height = 90.dp,
+                width = (screenSize.first.toInt() / 4 - 15).dp,
+                isKalakar = true
             )
             SwappableDots( kalakarRecommendedIndex, Modifier)
 

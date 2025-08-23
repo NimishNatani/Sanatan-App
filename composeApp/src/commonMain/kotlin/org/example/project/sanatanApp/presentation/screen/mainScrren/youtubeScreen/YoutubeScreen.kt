@@ -64,12 +64,12 @@ fun YoutubeScreen(
 
 
         Column(
-            modifier = Modifier.fillMaxSize().background(White).padding(vertical = 10.dp, horizontal = 5.dp),
+            modifier = Modifier.fillMaxSize().background(White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // YouTube Player Box
             Box(
-                modifier = Modifier.fillMaxWidth().background(Color.White),
+                modifier = Modifier.fillMaxWidth().background(Color.White).padding(vertical = 10.dp, horizontal = 5.dp),
                 contentAlignment = Alignment.Center
             ) {
                 VideoPlayerView(
@@ -78,7 +78,8 @@ fun YoutubeScreen(
                     url = url!!,
                     playerConfig = PlayerConfig(
                         isPause = isPause.value,
-                        pauseCallback = { isPause.value = it })
+                        pauseCallback = { isPause.value = it },
+                        )
                 )
             }
 
@@ -86,7 +87,7 @@ fun YoutubeScreen(
 
             // Subtitle Section
             Column(
-                modifier = Modifier.fillMaxSize().padding(10.dp)
+                modifier = Modifier.fillMaxSize().padding(vertical = 10.dp, horizontal = 20.dp)
             ) {
                 Text(state.youtube.title, fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Black)
                 Spacer(modifier = Modifier.height(8.dp))

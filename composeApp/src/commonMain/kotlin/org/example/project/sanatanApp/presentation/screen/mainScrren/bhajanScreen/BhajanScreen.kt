@@ -72,7 +72,7 @@ fun BhajanScreen(
 
     LaunchedEffect(Unit) {
         if (isKalakar) {
-//            onAction(BhajanScreenAction.OnLoadingBhajanKalakar(name))
+            onAction(BhajanScreenAction.OnLoadingBhajanKalakar(name))
         } else {
             onAction(BhajanScreenAction.OnLoadingBhajan(name))
         }

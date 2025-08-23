@@ -11,7 +11,7 @@ import org.example.project.sanatanApp.data.dto.YoutubeDto
 import org.example.project.sanatanApp.domain.model.Aarti
 
 class YoutubeApi(private val client: HttpClient) {
-    private val BASE_URL = "http://192.168.89.173:8080/api/youtube"
+    private val BASE_URL = "http://10.14.5.150:8080/api/youtube"
 
 
     suspend fun getAartiSubtitles(url:String): Result<YoutubeDto,DataError.Remote> {
