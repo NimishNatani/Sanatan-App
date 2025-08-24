@@ -114,7 +114,7 @@ fun HomeScreen(
             ) {
 
             }
-            SwappableDots( selectedIndex, Modifier,totalItems,)
+            SwappableDots(selectedIndex, Modifier, totalItems,)
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -164,15 +164,17 @@ fun HomeScreen(
         val recommendedIndex = remember { mutableStateOf(0) }
         val recommendedItems = listOf("आपके लिए 1", "आपके लिए 2", "आपके लिए 3", "आपके लिए 4")
         val lastRecommendedSwipeTime = remember { mutableStateOf(0L) }
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp), horizontalAlignment = Alignment.CenterHorizontally,) {
+            BhagwanSwappableBox(
+                recommendedIndex,
+                lastRecommendedSwipeTime,
+                height = 120.dp,
+                width = 160.dp
+            )
+        }
+            SwappableDots(recommendedIndex, Modifier)
+        }
 
-        BhagwanSwappableBox(
-            recommendedIndex,
-            lastRecommendedSwipeTime,
-            height = 120.dp,
-            width = 160.dp
-        )
-        SwappableDots( recommendedIndex, Modifier)
-    }
 }
 
 

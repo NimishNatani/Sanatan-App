@@ -6,11 +6,12 @@ import io.ktor.client.request.setBody
 import org.example.project.core.domain.Result
 import org.example.project.core.di.safeCall
 import org.example.project.core.domain.DataError
+import org.example.project.sanatanApp.SharedObject.baseUrl
 import org.example.project.sanatanApp.data.dto.AartiDto
 import org.example.project.sanatanApp.domain.model.Aarti
 
 class AartiApi(private val client: HttpClient) {
-    private val BASE_URL = "http://10.14.5.150:8080/api/aarti"
+    private val BASE_URL = "$baseUrl/aarti"
 
     suspend fun getAllAarti(): Result<List<AartiDto>,DataError.Remote> {
         return safeCall<List<AartiDto>> {

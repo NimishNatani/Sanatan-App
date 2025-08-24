@@ -7,12 +7,15 @@ import org.example.project.sanatanApp.data.api.AartiApi
 import org.example.project.sanatanApp.data.api.BhajanApi
 import org.example.project.sanatanApp.data.api.MantraApi
 import org.example.project.sanatanApp.data.api.YoutubeApi
+import org.example.project.sanatanApp.data.api.KathaApi
 import org.example.project.sanatanApp.data.repository.AartiRepoImpl
 import org.example.project.sanatanApp.data.repository.BhajanRepoImpl
 import org.example.project.sanatanApp.data.repository.MantraRepoImpl
 import org.example.project.sanatanApp.data.repository.YoutubeRepoImpl
+import org.example.project.sanatanApp.data.repository.KathaRepoImpl
 import org.example.project.sanatanApp.domain.repository.AartiRepo
 import org.example.project.sanatanApp.domain.repository.BhajanRepo
+import org.example.project.sanatanApp.domain.repository.KathaRepo
 import org.example.project.sanatanApp.domain.repository.MantraRepo
 import org.example.project.sanatanApp.domain.repository.YoutubeRepo
 import org.example.project.sanatanApp.presentation.StorageViewModel
@@ -49,11 +52,13 @@ val appModule = module {
     singleOf(::YoutubeApi)
     singleOf(::BhajanApi)
     singleOf(::MantraApi)
+    singleOf(::KathaApi)
 
     singleOf(::AartiRepoImpl).bind<AartiRepo>()
     singleOf(::YoutubeRepoImpl).bind<YoutubeRepo>()
     singleOf(::BhajanRepoImpl).bind<BhajanRepo>()
     singleOf(::MantraRepoImpl).bind<MantraRepo>()
+    singleOf(::KathaRepoImpl).bind<KathaRepo>()
 
     viewModelOf(::HomeScreenViewModel)
     viewModelOf(::MainScreenViewModel)

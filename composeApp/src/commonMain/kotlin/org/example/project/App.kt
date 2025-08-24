@@ -26,7 +26,7 @@ import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScree
 import org.example.project.sanatanApp.presentation.screen.mainScrren.bhajanScreen.BhajanScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.granthScreen.GranthScreenViewModel
-import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaListenScreenRoot
+import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaBhagwanScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenRoot
 import org.example.project.sanatanApp.presentation.screen.mainScrren.kathaScreen.KathaScreenViewModel
 import org.example.project.sanatanApp.presentation.screen.mainScrren.mantraScreen.MantraBhagwanScreenRoot
@@ -70,7 +70,7 @@ fun App() {
                             "AartiDto" -> navController.navigate(Route.AartiBhagwanScreen)
                             "Bhajan" -> navController.navigate(Route.BhajanBhagwanScreen)
                             "Granth" -> navController.navigate(Route.GranthScreen)
-                            "Katha" -> navController.navigate(Route.KathaScreen)
+                            "Katha" -> navController.navigate(Route.KathaBhagwanScreen)
                             "Mantra" -> navController.navigate(Route.MantraBhagwanScreen)
                             "Darshan" -> navController.navigate(Route.DarshanScreen)
                         }
@@ -81,8 +81,10 @@ fun App() {
                         it.sharedKoinViewModel<StorageViewModel>(navController)
                     AartiBhagwanScreenRoot(
                         onBackClick = { navController.popBackStack() },
-                        onBhagwanClick = { name -> sharedUserViewModel.setBhagwanName(name,false)
-                            navController.navigate(Route.AartiScreen)})
+                        onBhagwanClick = { name ->
+                            sharedUserViewModel.setBhagwanName(name, false)
+                            navController.navigate(Route.AartiScreen)
+                        })
                 }
                 composable<Route.AartiScreen> {
                     val viewModel = koinViewModel<AartiScreenViewModel>()
@@ -91,36 +93,43 @@ fun App() {
                     sharedUserViewModel.bhagwanNameState.value?.let { value ->
                         AartiScreenRoot(
                             viewModel = viewModel,
-                            name  = value.first,
+                            name = value.first,
                             onBackClick = { navController.popBackStack() },
-                            onAartiClick = { link -> sharedUserViewModel.setLink(link)
-                                navController.navigate(Route.YoutubeScreen)})
+                            onAartiClick = { link ->
+                                sharedUserViewModel.setLink(link)
+                                navController.navigate(Route.YoutubeScreen)
+                            })
                     }
 
                 }
-                composable<Route.BhajanBhagwanScreen>{
+                composable<Route.BhajanBhagwanScreen> {
                     val viewModel = koinViewModel<BhajanScreenViewModel>()
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
                     BhajanBhagwanScreenRoot(
                         viewModel = viewModel,
                         onBackClick = { navController.popBackStack() },
-                        onBhajanClick = { name,isKalakar -> sharedUserViewModel.setBhagwanName(name,isKalakar)
-                            navController.navigate(Route.BhajanScreen)})
+                        onBhajanClick = { name, isKalakar ->
+                            sharedUserViewModel.setBhagwanName(name, isKalakar)
+                            navController.navigate(Route.BhajanScreen)
+                        })
                 }
                 composable<Route.BhajanScreen> {
                     val viewModel = koinViewModel<BhajanScreenViewModel>()
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
                     sharedUserViewModel.bhagwanNameState.value?.let { value ->
-                    BhajanScreenRoot(
-                        viewModel = viewModel,
-                        name = value.first,
-                        isKalakar = value.second,
-                        onBackClick = { navController.popBackStack() },
-                        onBhajanClick = { bhajan -> sharedUserViewModel.setLink(bhajan)
-                        navController.navigate(Route.YoutubeScreen)}
-                        )}
+                        BhajanScreenRoot(
+                            viewModel = viewModel,
+                            name = value.first,
+                            isKalakar = value.second,
+                            onBackClick = { navController.popBackStack() },
+                            onBhajanClick = { bhajan ->
+                                sharedUserViewModel.setLink(bhajan)
+                                navController.navigate(Route.YoutubeScreen)
+                            }
+                        )
+                    }
                 }
                 composable<Route.MantraBhagwanScreen> {
                     val viewModel = koinViewModel<MantraScreenViewModel>()
@@ -129,8 +138,10 @@ fun App() {
                     MantraBhagwanScreenRoot(
                         viewModel = viewModel,
                         onBackClick = { navController.popBackStack() },
-                        onMantraClick = { name -> sharedUserViewModel.setBhagwanName(name,false)
-                            navController.navigate(Route.MantraScreen)})
+                        onMantraClick = { name ->
+                            sharedUserViewModel.setBhagwanName(name, false)
+                            navController.navigate(Route.MantraScreen)
+                        })
                 }
                 composable<Route.MantraScreen> {
                     val sharedUserViewModel =
@@ -141,8 +152,10 @@ fun App() {
                             viewModel = viewModel,
                             name = value.first,
                             onBackClick = { navController.popBackStack() },
-                            onMantraClick = { mantra -> sharedUserViewModel.setLink(mantra)
-                                navController.navigate(Route.YoutubeScreen)})
+                            onMantraClick = { mantra ->
+                                sharedUserViewModel.setLink(mantra)
+                                navController.navigate(Route.YoutubeScreen)
+                            })
                     }
                 }
                 composable<Route.GranthScreen> {
@@ -151,58 +164,92 @@ fun App() {
                         viewModel = viewModel,
                         onBackClick = { navController.popBackStack() })
                 }
+                composable<Route.KathaBhagwanScreen> {
+                    val viewModel = koinViewModel<KathaScreenViewModel>()
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
+
+                    KathaBhagwanScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = { navController.popBackStack() },
+                        onKathaClick = { name, isKalakar ->
+                            sharedUserViewModel.setBhagwanName(name, isKalakar)
+                            navController.navigate(Route.KathaScreen)
+                        })
+
+                }
                 composable<Route.KathaScreen> {
                     val viewModel = koinViewModel<KathaScreenViewModel>()
-                    KathaScreenRoot(
-                        viewModel = viewModel,
-                        kathaListen = {navController.navigate(Route.KathaListenScreen)},
-                        onBackClick = { navController.popBackStack() })
+                    val sharedUserViewModel =
+                        it.sharedKoinViewModel<StorageViewModel>(navController)
+                    sharedUserViewModel.bhagwanNameState.value?.let { value ->
+                        KathaScreenRoot(
+                            viewModel = viewModel,
+
+                            name = value.first,
+                            isKalakar = value.second,
+                            onBackClick = { navController.popBackStack() },
+
+                            onKathaClick = { katha ->
+                                sharedUserViewModel.setLink(katha)
+                                navController.navigate(Route.YoutubeScreen)
+                            }
+                        )
+                    }
                 }
-                composable<Route.KathaListenScreen>{
-                    KathaListenScreenRoot()
-                }
-                composable<Route.YoutubeScreen>{
+
+                composable<Route.YoutubeScreen> {
                     val url = mutableStateOf<String?>(null)
                     val sharedUserViewModel =
                         it.sharedKoinViewModel<StorageViewModel>(navController)
-                    sharedUserViewModel.listTypeState.value?.let{value->
-                        when(value){
-                             "Aarti"->{
-                                 sharedUserViewModel.aartiState.value?.let {
-                                         aarti-> url.value = aarti.aarti.values.firstOrNull()?.link
-                                 }
-                             }
+                    sharedUserViewModel.listTypeState.value?.let { value ->
+                        when (value) {
+                            "Aarti" -> {
+                                sharedUserViewModel.aartiState.value?.let { aarti ->
+                                    url.value = aarti.aarti.values.firstOrNull()?.link
+                                }
+                            }
+
                             "Bhajan" -> {
-                                sharedUserViewModel.bhajanState.value?.let {
-                                        bhajan-> url.value = bhajan.bhajan.values.firstOrNull()?.link
+                                sharedUserViewModel.bhajanState.value?.let { bhajan ->
+                                    url.value = bhajan.bhajan.values.firstOrNull()?.link
                                 }
                             }
-                            "Mantra" ->{
-                                sharedUserViewModel.mantraState.value?.let {
-                                        mantra-> when(mantra.second){
-                                            1-> {
-                                                url.value =
-                                                    mantra.first.mantra.getValue("mantra1").link
-                                            }
-                                            2-> {
-                                                url.value =
-                                                    mantra.first.mantra.getValue("mantra2").link
-                                            }
-                                            3-> {
-                                                url.value =
-                                                    mantra.first.mantra.getValue("mantra3").link
-                                            }
+
+                            "Katha" -> {
+                                sharedUserViewModel.kathaState.value?.let { katha ->
+                                    url.value = katha.first.katha.values.firstOrNull()?.link
+                                }
+                            }
+
+                            "Mantra" -> {
+                                sharedUserViewModel.mantraState.value?.let { mantra ->
+                                    when (mantra.second) {
+                                        1 -> {
+                                            url.value =
+                                                mantra.first.mantra.getValue("mantra1").link
                                         }
+
+                                        2 -> {
+                                            url.value =
+                                                mantra.first.mantra.getValue("mantra2").link
+                                        }
+
+                                        3 -> {
+                                            url.value =
+                                                mantra.first.mantra.getValue("mantra3").link
+                                        }
+                                    }
                                 }
                             }
-                            else ->{}
+
+                            else -> {}
                         }
                         url.value?.let {
                             YoutubeScreenRoot(url = url.value)
                         }
                     }
-                    sharedUserViewModel.linkState.value?.let {
-                        link->
+                    sharedUserViewModel.linkState.value?.let { link ->
                         YoutubeScreenRoot(
                             url = link,
                         )

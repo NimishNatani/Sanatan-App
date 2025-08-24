@@ -49,7 +49,7 @@ sealed interface Route {
     data object DarshanScreen :Route
 
     @Serializable
-    data object KathaListenScreen :Route
+    data object KathaBhagwanScreen :Route
 
     @Serializable
     data object YoutubeScreen :Route

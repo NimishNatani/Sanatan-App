@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.example.project.sanatanApp.domain.model.Aarti
 import org.example.project.sanatanApp.domain.model.Bhajan
+import org.example.project.sanatanApp.domain.model.Katha
 import org.example.project.sanatanApp.domain.model.Mantra
 import org.example.project.sanatanApp.presentation.screen.mainScrren.aartiScreen.AartiScreenState
 
@@ -18,9 +19,14 @@ class StorageViewModel():ViewModel() {
     val listTypeState = _listType.asStateFlow()
     private val _mantra = MutableStateFlow<Pair<Mantra,Int>?>(null)
     val mantraState = _mantra.asStateFlow()
+    private val _katha = MutableStateFlow<Pair<Katha,Int>?>(null)
+    val kathaState = _katha.asStateFlow()
 
     private val _bhagwanName = MutableStateFlow<Pair<String,Boolean>?>(null)
     val bhagwanNameState = _bhagwanName.asStateFlow()
+
+//    private val _kathaName = MutableStateFlow<Pair<String,Boolean>?>(null)
+//    val kathaNameState = _kathaName.asStateFlow()
 
     private val _link = MutableStateFlow<String?>(null)
     val linkState = _link.asStateFlow()

@@ -6,12 +6,13 @@ import io.ktor.client.request.setBody
 import org.example.project.core.domain.Result
 import org.example.project.core.di.safeCall
 import org.example.project.core.domain.DataError
+import org.example.project.sanatanApp.SharedObject.baseUrl
 import org.example.project.sanatanApp.data.dto.AartiDto
 import org.example.project.sanatanApp.data.dto.YoutubeDto
 import org.example.project.sanatanApp.domain.model.Aarti
 
 class YoutubeApi(private val client: HttpClient) {
-    private val BASE_URL = "http://10.14.5.150:8080/api/youtube"
+    private val BASE_URL = "$baseUrl/youtube"
 
 
     suspend fun getAartiSubtitles(url:String): Result<YoutubeDto,DataError.Remote> {

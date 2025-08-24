@@ -44,15 +44,22 @@ import org.example.project.core.presentation.lightOrange
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import sanatanapp.composeapp.generated.resources.Res
+import sanatanapp.composeapp.generated.resources.anirudhacharya
 import sanatanapp.composeapp.generated.resources.anoop_jalota
 import sanatanapp.composeapp.generated.resources.anuradha_paudwal
+import sanatanapp.composeapp.generated.resources.bageshwar_dham
+import sanatanapp.composeapp.generated.resources.chitralekha_ji
 import sanatanapp.composeapp.generated.resources.chotu_singh_raavana
+import sanatanapp.composeapp.generated.resources.devkinandan_thakur
 import sanatanapp.composeapp.generated.resources.durga_ji
 import sanatanapp.composeapp.generated.resources.gulshan_kumar
 import sanatanapp.composeapp.generated.resources.hanumanji
+import sanatanapp.composeapp.generated.resources.indreshji_maharaj
+import sanatanapp.composeapp.generated.resources.jayakishoriji
 import sanatanapp.composeapp.generated.resources.kanhaiya_mittal
 import sanatanapp.composeapp.generated.resources.lakhbir_singh_lakkha
 import sanatanapp.composeapp.generated.resources.laxmiji
+import sanatanapp.composeapp.generated.resources.pradeep_mishra
 import sanatanapp.composeapp.generated.resources.rajan_ji
 import sanatanapp.composeapp.generated.resources.ramji
 import sanatanapp.composeapp.generated.resources.saraswatiji
@@ -85,6 +92,23 @@ val kalakarList =
         Pair("rajan_ji", Res.drawable.rajan_ji),
         Pair("chotu_singh_raavana", Res.drawable.chotu_singh_raavana)
     )
+
+val kathaBhagwanList = listOf(
+    Pair("hanuman_katha",Res.drawable.hanumanji),
+    Pair("shiv_katha",Res.drawable.shivji),
+    Pair("vishnu_katha",Res.drawable.vishnuji),
+    Pair("krishna_katha",Res.drawable.durga_ji),)
+
+val kathaKalakarList = listOf(
+    Pair("bageshwar_dham",Res.drawable.bageshwar_dham),
+    Pair("pradeep_mishra",Res.drawable.pradeep_mishra),
+    Pair("devkinandan_thakur",Res.drawable.devkinandan_thakur),
+    Pair("anirudhacharya",Res.drawable.anirudhacharya),
+    Pair("indreshji_maharaj",Res.drawable.indreshji_maharaj),
+    Pair("chitralekha_ji",Res.drawable.chitralekha_ji),
+    Pair("jayakishoriji",Res.drawable.jayakishoriji)
+)
+
 
 @Composable
 fun Modifier.swipeGesture(
@@ -206,9 +230,14 @@ fun BhagwanSwappableBox(
     height: Dp = 80.dp,
     width: Dp = 80.dp,
     isKalakar:Boolean=false,
+    isKatha:Boolean = false,
     onClick: (name: String) -> Unit = {}
 ) {
-    val bhagwanListItems = if(isKalakar) kalakarList else bhagwanList
+    val bhagwanListItems = if(isKatha){
+        if(isKalakar) kathaKalakarList else kathaBhagwanList
+    }else{
+        if(isKalakar) kalakarList else bhagwanList
+    }
     Row(
         modifier = Modifier.fillMaxWidth().height(height).padding(vertical = 8.dp,)
             .swipeGesture(
